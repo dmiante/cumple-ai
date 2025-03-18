@@ -1,39 +1,52 @@
-import { google } from '@ai-sdk/google'
-import { GoogleGenerativeAIProviderMetadata } from '@ai-sdk/google'
-import { generateText } from 'ai'
+// import { google } from '@ai-sdk/google'
+import { ollama } from 'ollama-ai-provider'
+// import { deepseek } from '@ai-sdk/deepseek'
+import { parse } from '@formkit/tempo'
+import { generateText, tool } from 'ai'
 import { NextResponse } from 'next/server'
-// import { z } from 'zod'
+import { z } from 'zod'
 
 export async function POST(req: Request) {
   const { prompt }: { prompt: string } = await req.json()
 
-  const { text, experimental_providerMetadata } = await generateText({
-    model: google('gemini-2.0-flash-exp', {
-      useSearchGrounding: true
-    }),
-    // tools: {
-    //   message: tool({
-    //     description: 'Get the message',
-    //     parameters: z.object({
-    //       location: z.string().describe('The location to get the weather for')
-    //     }),
-    //     execute: async ({ location }) => ({
-    //       location,
-    //       temperature: 72 + Math.floor(Math.random() * 21) - 10
-    //     })
-    //   })
-    // },
-    prompt
+  const { text } = await generateText({
+    model: ollama('llama3.2:3b'),
+    tools: {
+      message: tool({
+        description: 'Get a historical fact from world history about a date',
+        parameters: z.object({
+          date: z.string().describe('The date to get a historical fact about')
+        }),
+        execute: async ({ date }) => {
+          const parseDate = parse(date, 'YYYY-MM-DD')
+          // const response = await fetch(
+          //   `https://history.muffinlabs.com/date/${parseDate.getMonth()}/${parseDate.getDate()}`
+          // )
+          // const data = await response.json()
+          // const msg: string = data.data.Events[0].text
+          // return { message: msg }
+          const resp = await fetch(
+            `http://numbersapi.com/${parseDate.getMonth()}/${parseDate.getDate()}/date`
+          )
+          const data = await resp.text()
+          return { message: data }
+        }
+      })
+    },
+    prompt,
+    system:
+      'You are a helpful assitant that can provide historical facts about any date in spanish.' +
+      'You can provide a birthday message in spanish for a person based on their name and birthday date' +
+      `The response is must be in format JSON valid like this: 
+      { 
+        "fact": "The historical fact here",
+        "message": "The message birthday here"
+      }
+      `,
+    maxSteps: 3
   })
 
-  const metadata = experimental_providerMetadata?.google as
-    | GoogleGenerativeAIProviderMetadata
-    | undefined
-  const groundingMetadata = metadata?.groundingMetadata
-  const support = groundingMetadata?.groundingSupports
-  // console.log(groundingMetadata)
-  // console.log({ PROMPT: prompt })
-  console.log({ text, support })
+  console.log(text)
 
   return NextResponse.json(text)
 }

@@ -9,9 +9,12 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@ai-sdk/deepseek": "^0.1.15",
     "@ai-sdk/google": "^1.1.6",
+    "@formkit/tempo": "^0.1.2",
     "ai": "^4.1.16",
     "next": "15.1.5",
+    "ollama-ai-provider": "^1.2.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "zod": "^3.24.2"

@@ -4,26 +4,24 @@ import { useState } from "react"
 
 export default function Home() {
   const [dateBirthday, setDateBirthday] = useState<string>('')
-  const [name, setName] = useState<string>('')
+  const [isLoading, setIsLoading] = useState(false)
+  const [name, setName] = useState('')
   const [quote, setQuote] = useState('')
+
   async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault()
     try {
+      setIsLoading(true)
       const res = await fetch('/api/facts', {
         method: 'POST',
         body: JSON.stringify({
-          prompt: `Eres un asistente experto en crear experiencias personalizadas para cumpleaños.
-          Recibirás el siguiente nombre: ${name} y la siguiente fecha de cumpleaños: ${dateBirthday}.
-          Tu tarea es generar mensajes originales y emotivos para felicitar a una persona en su cumpleaños, basado en el nombre que recibiste.
-          Asegúrate de que el tono del mensaje sea amigable y especial, no mas de 100 palabras y en español.
-          Si el nombre recibido no es un nombre válido como por ejemplo preguntas, mensajes sin sentido o en otros idiomas, deberás indicar que se vuelva a escribir un nombre con una extensión máxima de tres palabras y valid sera false.
-          Me devolverás la respuesta en texto plano como el siguiente:
-          { "message": "Tu respuesta", "valid": true }
-          `
+          // prompt: `Give me a historical fact about this date: ${dateBirthday}. And a birthday message for ${name}.`
+          prompt: `${name} ${dateBirthday}`
         })
       })
       const data = await res.json()
       console.log(data)
+      setIsLoading(false)
       setQuote(data)
     } catch (error) {
       console.error(error)
@@ -54,6 +52,7 @@ export default function Home() {
             <input
               type="date"
               id="birthday"
+              data-date-format="YYYY-MM-DD"
               className="text-black w-full text-lg p-4 border-2 border-purple-300 rounded-xl focus:border-purple-500 focus:ring focus:ring-purple-200 transition-all duration-300"
               onChange={(e) => setDateBirthday(e.target.value)}
             />
@@ -68,7 +67,8 @@ export default function Home() {
 
         {/* Quote Display */}
         <div className="mt-8 p-6 bg-gradient-to-r from-yellow-200 via-green-200 to-blue-200 rounded-2xl shadow-lg max-w-2xl w-full mx-auto text-black text-pretty">
-          <p>{quote}</p>
+          {isLoading && <p>Loading...</p>}
+          {!isLoading && <p>{quote}</p>}
         </div>
       </div>
     </main>
