@@ -1,5 +1,5 @@
-// import { google } from '@ai-sdk/google'
-import { ollama } from 'ollama-ai-provider'
+import { google } from '@ai-sdk/google'
+// import { ollama } from 'ollama-ai-provider'
 // import { deepseek } from '@ai-sdk/deepseek'
 import { parse } from '@formkit/tempo'
 import { generateText, tool } from 'ai'
@@ -9,10 +9,10 @@ import { z } from 'zod'
 export async function POST(req: Request) {
   const { prompt }: { prompt: string } = await req.json()
 
-  const { text } = await generateText({
-    model: ollama('llama3.2:3b'),
+  const result = await generateText({
+    model: google('gemini-1.5-flash'),
     tools: {
-      message: tool({
+      fact: tool({
         description: 'Get a historical fact from world history about a date',
         parameters: z.object({
           date: z.string().describe('The date to get a historical fact about')
@@ -29,24 +29,23 @@ export async function POST(req: Request) {
             `http://numbersapi.com/${parseDate.getMonth()}/${parseDate.getDate()}/date`
           )
           const data = await resp.text()
-          return { message: data }
+          return { data }
         }
       })
     },
     prompt,
-    system:
-      'You are a helpful assitant that can provide historical facts about any date in spanish.' +
-      'You can provide a birthday message in spanish for a person based on their name and birthday date' +
-      `The response is must be in format JSON valid like this: 
-      { 
-        "fact": "The historical fact here",
-        "message": "The message birthday here"
-      }
-      `,
+    // system:
+    //   'You are a helpful assitant that can provide historical facts about any date in spanish.' +
+    //   'You can provide a birthday message in spanish for a person based on their name and birthday date' +
+    //   `The response is must be in format JSON valid like this:
+
+    //   { "fact": "The historical fact here", "message": "The message birthday here" }
+
+    //   `,
     maxSteps: 3
   })
 
-  console.log(text)
+  console.log(result.steps[0].toolResults)
 
-  return NextResponse.json(text)
+  return NextResponse.json(result.text)
 }
