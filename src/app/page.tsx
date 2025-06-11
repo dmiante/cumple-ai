@@ -1,12 +1,16 @@
 'use client'
 
+// import { useCompletion } from "ai/react"
 import { useState } from "react"
 
 export default function Home() {
   const [dateBirthday, setDateBirthday] = useState<string>('')
-  const [isLoading, setIsLoading] = useState(false)
   const [name, setName] = useState('')
-  const [quote, setQuote] = useState('')
+  const [city, setCity] = useState('')
+  const [response, setResponse] = useState('')
+  const [isLoading, setIsLoading] = useState(false)
+
+  // const {completion, input, handleInputChange, handleSubmit} = useCompletion()
 
   async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault()
@@ -15,18 +19,24 @@ export default function Home() {
       const res = await fetch('/api/facts', {
         method: 'POST',
         body: JSON.stringify({
-          // prompt: `Give me a historical fact about this date: ${dateBirthday}. And a birthday message for ${name}.`
-          prompt: `${name} ${dateBirthday}`
+          // prompt:
+
+          // prompt: `${name} ${dateBirthday}`
+          name: name,
+          birthday: dateBirthday,
+          city: city
         })
       })
       const data = await res.json()
       console.log(data)
       setIsLoading(false)
-      setQuote(data)
+      setResponse(data)
     } catch (error) {
       console.error(error)
     }
   }
+
+  const hasResponse = response.length > 1
 
   return (
     <main className="min-h-screen bg-gradient-to-br from-purple-400 via-pink-500 to-red-500 flex flex-col items-center justify-center p-8">
@@ -40,7 +50,7 @@ export default function Home() {
           onSubmit={handleSubmit}>
           <div className="space-y-2">
             <label htmlFor="birthday" className="block text-xl font-semibold text-purple-700">
-              Whens your birthday?
+              When&apos;s your birthday?
             </label>
             <input
               type="text"
@@ -48,6 +58,7 @@ export default function Home() {
               placeholder="Tu nombre"
               className="text-black w-full text-lg p-4 border-2 border-purple-300 rounded-xl focus:border-purple-500 focus:ring focus:ring-purple-200 transition-all duration-300"
               onChange={(e) => setName(e.target.value)}
+              disabled={isLoading}
             />
             <input
               type="date"
@@ -55,21 +66,39 @@ export default function Home() {
               data-date-format="YYYY-MM-DD"
               className="text-black w-full text-lg p-4 border-2 border-purple-300 rounded-xl focus:border-purple-500 focus:ring focus:ring-purple-200 transition-all duration-300"
               onChange={(e) => setDateBirthday(e.target.value)}
+              disabled={isLoading}
+            />
+            <input
+              type="text"
+              id="city"
+              placeholder="Tu ciudad"
+              className="text-black w-full text-lg p-4 border-2 border-purple-300 rounded-xl focus:border-purple-500 focus:ring focus:ring-purple-200 transition-all duration-300"
+              onChange={(e) => setCity(e.target.value)}
+              disabled={isLoading}
             />
           </div>
           <button
             type="submit"
             className="w-full text-xl py-6 bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 rounded-xl transition-all duration-300 transform hover:scale-105 text-white font-bold"
+            disabled={isLoading}
           >
-            Get Your Birthday Quote!
+            {
+              isLoading ? (
+                'Searching...'
+              ) : (
+                'Get Your Birthday Quote!'
+              )}
           </button>
         </form>
 
         {/* Quote Display */}
-        <div className="mt-8 p-6 bg-gradient-to-r from-yellow-200 via-green-200 to-blue-200 rounded-2xl shadow-lg max-w-2xl w-full mx-auto text-black text-pretty">
-          {isLoading && <p>Loading...</p>}
-          {!isLoading && <p>{quote}</p>}
-        </div>
+        {
+          hasResponse && (
+            <div className="mt-8 p-6 bg-gradient-to-r from-yellow-200 via-green-200 to-blue-200 rounded-2xl shadow-lg max-w-2xl w-full mx-auto text-black text-pretty">
+              {response}
+            </div>
+          )
+        }
       </div>
     </main>
   );
