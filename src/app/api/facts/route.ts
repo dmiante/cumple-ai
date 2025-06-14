@@ -9,7 +9,7 @@ import { z } from 'zod'
 export async function POST(req: Request) {
   // const { prompt }: { prompt: string } = await req.json()
   const body = await req.json()
-  const { name, dateBirthday, city } = body
+  const { name, birthday, city } = body
 
   const result = await streamText({
     model: google('gemini-2.5-flash-preview-04-17', {
@@ -42,13 +42,13 @@ export async function POST(req: Request) {
     prompt: `
         Eres un asistente útil que proporciona información personalizada de cumpleaños.
         La respuesta consta de tres partes: la felicitación de cumpleaños, los eventos históricos y las ofertas de cumpleaños. No omitas ninguna. Y solo responde con esas partes en el mismo orden y sin introducción de respuesta.
-        Proporciona la siguiente información en formato Markdown para ${name}, cuyo cumpleaños es el ${dateBirthday}:
+        Proporciona la siguiente información en formato Markdown para ${name}, cuyo cumpleaños es el ${birthday}:
 
         ## Saludo de cumpleaños
         Crea una frase que sea una felicitación de cumpleaños cálida y personalizada para ${name}. Hazla alegre, festiva y cercana. Asegúrate de que sea una frase para enviar a otra persona cercana.
 
         ## Eventos históricos
-        Usa la función de tool para obtener un evento histórico que ocurrió el ${dateBirthday}.
+        Usa la función de tool para obtener un evento histórico que ocurrió el ${birthday}.
         Simplemente responde con los datos que obtengas de la función de tool.
 
         ## Ofertas de cumpleaños
@@ -66,7 +66,8 @@ export async function POST(req: Request) {
     //   The answer is must be in spanish.
     //   `,
     maxSteps: 3,
-    temperature: 0.7
+    temperature: 0.7,
+    toolChoice: { type: 'tool', toolName: 'fact' }
   })
 
   // console.log('STEPS-TEXT: ', result.steps[0].toolResults[0].result.data)
@@ -76,8 +77,8 @@ export async function POST(req: Request) {
   //   console.log(textPart)
   // }
 
-  console.log('toDataStreamRs: ', result.toDataStreamResponse())
-  console.log('TEXT: ', result.text)
+  // console.log('toDataStreamRs: ', result.toDataStreamResponse())
+  // console.log('TEXT: ', result.text)
 
   return result.toDataStreamResponse()
 }
