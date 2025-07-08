@@ -4,6 +4,9 @@ import { useState } from "react"
 import { useCompletion } from "ai/react"
 
 import BirthdayGreeting from "./birthday-greeting"
+import { ArrowRight, Calendar, Loader2, MapPin, User } from "lucide-react"
+import BirthdayHistorical from "./birthday-historical"
+import BirthdayOffers from "./birthday-offers"
 
 export default function BirthdayForm() {
   const [dateBirthday, setDateBirthday] = useState<string>('')
@@ -36,58 +39,90 @@ export default function BirthdayForm() {
     }
   }
   return (
-    <div>
-      <form className="space-y-6 w-full max-w-md mx-auto"
-        onSubmit={handleSubmit}
-      >
-        <div className="space-y-2">
-          <input
-            type="text"
-            id="name"
-            placeholder="Tu nombre"
-            className="text-black w-full text-lg p-4 border-2 border-purple-300 rounded-xl focus:border-purple-500 focus:ring focus:ring-purple-200 transition-all duration-300"
-            onChange={(e) => setName(e.target.value)}
-            disabled={isLoading}
-          />
-          <input
-            type="date"
-            id="birthday"
-            data-date-format="YYYY-MM-DD"
-            className="text-black w-full text-lg p-4 border-2 border-purple-300 rounded-xl focus:border-purple-500 focus:ring focus:ring-purple-200 transition-all duration-300"
-            onChange={(e) => setDateBirthday(e.target.value)}
-            disabled={isLoading}
-          />
-          <input
-            type="text"
-            id="city"
-            placeholder="Tu ciudad"
-            className="text-black w-full text-lg p-4 border-2 border-purple-300 rounded-xl focus:border-purple-500 focus:ring focus:ring-purple-200 transition-all duration-300"
-            onChange={(e) => setCity(e.target.value)}
-            disabled={isLoading}
-          />
-        </div>
-        <button
-          type="submit"
-          className="w-full text-xl py-6 bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 rounded-xl transition-all duration-300 transform hover:scale-105 text-white font-bold"
-          disabled={isLoading}
+    <>
+      <div className="bg-white rounded-3xl p-6 shadow-sm border border-gray-100 max-w-md mx-auto">
+        <form className="space-y-5"
+          onSubmit={handleSubmit}
         >
-          {
-            isLoading ? (
-              'Searching...'
-            ) : (
-              'Get Your Birthday Quote!'
-            )
-          }
-        </button>
-      </form>
+          <div className="space-y-2">
+            <label htmlFor="namelabel" className="text-sm font-medium text-gray-700 flex items-center gap-2">
+              <div className="w-5 h-5 bg-blue-100 rounded-full flex items-center justify-center">
+                <User className="h-3 w-3 text-blue-600" />
+              </div>
+              Tú nombre
+            </label>
+            <input
+              type="text"
+              id="namelabel"
+              placeholder="Escribe tu nombre"
+              className="w-full h-12 px-4 rounded-xl border border-gray-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 focus:outline-none text-gray-900 placeholder:text-gray-400 transition-colors"
+              onChange={(e) => setName(e.target.value)}
+              disabled={isLoading}
+            />
+          </div>
+          <div className="space-y-2">
+            <label htmlFor="birthday" className="text-sm font-medium text-gray-700 flex items-center gap-2">
+              <div className="w-5 h-5 bg-purple-100 rounded-full flex items-center justify-center">
+                <Calendar className="h-3 w-3 text-purple-600" />
+              </div>
+              Tú Día de Cumpleaños
+            </label>
+            <input
+              type="date"
+              id="birthday"
+              data-date-format="YYYY-MM-DD"
+              className="w-full h-12 px-4 rounded-xl border border-gray-200 focus:border-purple-500 focus:ring-2 focus:ring-purple-500/20 focus:outline-none text-gray-900 transition-colors"
+              onChange={(e) => setDateBirthday(e.target.value)}
+              disabled={isLoading}
+            />
+          </div>
+          <div className="space-y-2">
+            <label htmlFor="city" className="text-sm font-medium text-gray-700 flex items-center gap-2">
+              <div className="w-5 h-5 bg-green-100 rounded-full flex items-center justify-center">
+                <MapPin className="h-3 w-3 text-green-600" />
+              </div>
+              Tú Ciudad
+            </label>
+            <input
+              type="text"
+              id="city"
+              placeholder="Escribe tu ciudad"
+              className="w-full h-12 px-4 rounded-xl border border-gray-200 focus:border-green-500 focus:ring-2 focus:ring-green-500/20 focus:outline-none text-gray-900 transition-colors"
+              onChange={(e) => setCity(e.target.value)}
+              disabled={isLoading}
+            />
+          </div>
+          <button
+            type="submit"
+            className="w-full h-12 bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white font-medium rounded-xl shadow-lg shadow-blue-500/25 transition-all duration-200 hover:shadow-blue-500/40 hover:scale-[1.02] active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100 flex items-center justify-center gap-2"
+            disabled={isLoading}
+          >
+            {
+              isLoading ? (
+                <>
+                  Preparando...
+                  <Loader2 className="h-4 w-4 animate-spin" />
+                </>
+              ) : (
+                <>
+                  Buscar
+                  <ArrowRight className="h-4 w-4" />
+                </>
+              )
+            }
+          </button>
+        </form>
+      </div>
       {/* Response */}
       {/* {
           completion && completion.length > 0 && ( */}
-      <div className="mt-8 p-6 bg-gradient-to-r from-yellow-200 via-green-200 to-blue-200 rounded-2xl shadow-lg max-w-2xl w-full mx-auto text-black text-pretty">
+      <section className="grid grid-cols-1 md:grid-cols-4 lg:grid-cols-6 gap-4 auto-rows-min">
         <BirthdayGreeting content={completion} name={name} birthday={dateBirthday} />
-      </div>
+        <BirthdayHistorical content={completion} />
+        <BirthdayOffers />
+      </section>
       {/* )
         } */}
-    </div>
+    </>
   );
 }
