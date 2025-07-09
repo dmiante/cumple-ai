@@ -40,38 +40,43 @@ export async function POST(req: Request) {
       })
     },
     prompt: `
+        Crea una frase que sea una felicitación de cumpleaños cálida y personalizada para ${name}. Hazla alegre, festiva y cercana. Asegúrate de que sea una frase para enviar a otra persona cercana.
+        Busca un evento histórico para el dia: ${birthday}.
+        Busca ofertas y/o productos gratis en tiendas para mi cumpleaños en la siguiente ciudad: ${city}
+        `,
+    system: `
         Eres un asistente útil que proporciona información personalizada de cumpleaños.
-        La respuesta consta de tres partes: la felicitación de cumpleaños, los eventos históricos y las ofertas de cumpleaños. No omitas ninguna. Y solo responde con esas partes en el mismo orden y sin introducción de respuesta.
-        Proporciona la siguiente información en formato Markdown para ${name}, cuyo cumpleaños es el ${birthday}:
+        La respuesta consta de tres partes: la felicitación o saludo de cumpleaños, los eventos históricos y las ofertas de cumpleaños. No omitas ninguna. Y solo responde con esas partes en el mismo orden y sin introducción de respuesta.
+        Proporciona la siguiente información con este formato:
 
         ## Saludo de cumpleaños
-        Crea una frase que sea una felicitación de cumpleaños cálida y personalizada para ${name}. Hazla alegre, festiva y cercana. Asegúrate de que sea una frase para enviar a otra persona cercana.
+        - Frase: [Aquí va la felicitación de cumpleaños]
 
         ## Eventos históricos
-        Usa la función de tool para obtener un evento histórico que ocurrió el ${birthday}.
+        Usa la función de tool para obtener el evento histórico.
         Simplemente responde con los datos que obtengas de la función de tool.
+        - Hecho: [Aquí va el hecho histórico]
 
         ## Ofertas de cumpleaños
-        Busca en internet al menos 3 lugares o empresas que suelen ofrecer artículos, comidas o experiencias gratis a personas en su cumpleaños en ${city}.
-        Simplemente responde con la lista que encontraste. 
-        Para cada una, explica brevemente:
+        Busca en internet al menos 3 lugares o tiendas que suelen ofrecer artículos, comidas o experiencias gratis a personas en su cumpleaños en ${city}.
+        Simplemente responde con lo que encontraste.
+        Para cada oferta, rellena la siguiente lista:
 
-        - Qué incluye la oferta
-        - Requisitos para solicitarla (como inscribirse en un programa de recompensas)
-        - Cómo solicitarla
+        - Nombre tienda: [Aquí va el nombre de la tienda o lugar]
+        - Qué incluye la oferta: [Aquí va lo que incluye la oferta]
+        - Requisitos y como solicitarla: [Aquí va los requisitos y como solicitarla]
 
-        Formatea tu respuesta de forma clara y organizada con Markdown. Usa viñetas para las listas.
-      `,
-    // system: `
-    //   The answer is must be in spanish.
-    //   `,
+        Asegúrate de incluir tiendas y/o lugares populares como: Starbucks, Dunkin, etc.
+
+        Importante: Asegúrate que cada section sea claramente marcada con encabezados con ## y las usa guiones (-) para las listas. Sé especifico sobre las ofertas gratis y los requisitos.
+        `,
     maxSteps: 3,
     temperature: 0.7,
     toolChoice: { type: 'tool', toolName: 'fact' }
   })
 
   // console.log('STEPS-TEXT: ', result.steps[0].toolResults[0].result.data)
-  // console.log('RESULT: ', result.toTextStreamResponse())
+  // console.log('RESULT: ', (await result.response).messages)
 
   // for await (const textPart of result.textStream) {
   //   console.log(textPart)
