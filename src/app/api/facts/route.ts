@@ -1,9 +1,7 @@
 import { google } from '@ai-sdk/google'
 // import { ollama } from 'ollama-ai-provider'
 // import { deepseek } from '@ai-sdk/deepseek'
-// import { parse } from '@formkit/tempo'
 import { streamText, tool } from 'ai'
-// import { NextResponse } from 'next/server'
 import { z } from 'zod'
 
 export async function POST(req: Request) {
@@ -11,7 +9,7 @@ export async function POST(req: Request) {
   const body = await req.json()
   const { name, birthday, city } = body
 
-  const result = await streamText({
+  const result = streamText({
     model: google('gemini-2.5-flash-preview-04-17', {
       useSearchGrounding: true
     }),
@@ -19,11 +17,12 @@ export async function POST(req: Request) {
     tools: {
       fact: tool({
         description:
-          'Get a historical fact from world history about a specific date',
+          'Get a historical fact from world history about a specific date.',
         parameters: z.object({
           date: z.string().describe('The date to get a historical fact about')
         }),
         execute: async ({ date }) => {
+          console.log(date)
           const parseDate = new Date(date)
           const month = parseDate.getMonth() + 1
           const day = parseDate.getDate() + 1
@@ -60,13 +59,18 @@ export async function POST(req: Request) {
         ## Ofertas de cumpleaños
         Busca en internet al menos 3 lugares o tiendas que suelen ofrecer artículos, comidas o experiencias gratis a personas en su cumpleaños en ${city}.
         Simplemente responde con lo que encontraste.
-        Para cada oferta, rellena la siguiente lista:
+        Para cada oferta, rellena el siguiente objeto y agrégalos a un array:
 
-        - Nombre tienda: [Aquí va el nombre de la tienda o lugar]
-        - Qué incluye la oferta: [Aquí va lo que incluye la oferta]
-        - Requisitos y como solicitarla: [Aquí va los requisitos y como solicitarla]
+        {
+          "name": "[Aquí va el nombre de la tienda o lugar]",
+          "offer": "[Aquí va lo que incluye la oferta]",
+          "requirements": "[Aquí va los requisitos y como solicitarla]"
+        }
+        
+        No incluyas backticks en la respuesta. Solo el JSON crudo.
+        Respondé únicamente con un JSON válido, sin formatearlo como bloque de código, sin comillas triples ni backticks. Solo el objeto JSON.
 
-        Asegúrate de incluir tiendas y/o lugares populares como: Starbucks, Dunkin, etc.
+        Asegúrate de incluir tiendas y/o lugares populares como por ejemplo: Starbucks, Dunkin, etc.
 
         Importante: Asegúrate que cada section sea claramente marcada con encabezados con ## y las usa guiones (-) para las listas. Sé especifico sobre las ofertas gratis y los requisitos.
         `,
@@ -74,16 +78,6 @@ export async function POST(req: Request) {
     temperature: 0.7,
     toolChoice: { type: 'tool', toolName: 'fact' }
   })
-
-  // console.log('STEPS-TEXT: ', result.steps[0].toolResults[0].result.data)
-  // console.log('RESULT: ', (await result.response).messages)
-
-  // for await (const textPart of result.textStream) {
-  //   console.log(textPart)
-  // }
-
-  // console.log('toDataStreamRs: ', result.toDataStreamResponse())
-  // console.log('TEXT: ', result.text)
 
   return result.toDataStreamResponse()
 }
