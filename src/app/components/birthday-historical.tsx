@@ -1,36 +1,31 @@
 'use client'
 
-import { Clock, ExternalLink } from "lucide-react"
+import { Clock } from "lucide-react"
 
 interface BirthdayHistoricalProps {
-  content: string
+  historical: string | null
 }
 
-export default function BirthdayHistorical({ content }: BirthdayHistoricalProps) {
+export default function BirthdayHistorical({ historical }: BirthdayHistoricalProps) {
   return (
-    <div className="md:col-span-4 lg:col-span-3 bg-white rounded-3xl p-6 shadow-sm border border-gray-100 relative overflow-hidden">
+    <article className="md:col-span-4 lg:col-span-3 bg-white rounded-3xl p-6 shadow-sm border border-gray-100 relative overflow-hidden">
       <div>
         <div className="flex items-center gap-3 mb-4">
-          <div className="w-10 h-10 bg-blue-100 rounded-2xl flex items-center justify-center">
-            <Clock className="h-5 w-5 text-blue-600" />
+          <div className="w-12 h-12 bg-blue-100 rounded-2xl flex items-center justify-center">
+            <Clock className="h-6 w-6 text-blue-600" />
           </div>
           <div>
-            <h3 className="font-semibold text-gray-900">Historical Events</h3>
-            <p className="text-xs text-gray-500">On your birthday</p>
+            <h3 className="font-semibold text-gray-900 capitalize">Evento Histórico</h3>
+            <p className="text-xs text-gray-500 normal-case">En el día de tú cumpleaños</p>
           </div>
         </div>
 
-        <div className="bg-blue-50 rounded-2xl p-4 max-h-64 overflow-y-auto">
-          <div className="prose prose-blue max-w-none text-gray-700">
-            {/* <div dangerouslySetInnerHTML={{ __html: formatHistoricalContent(historicalSection) }} /> */}
-          </div>
-
-          <div className="mt-4 pt-3 border-t border-blue-100 flex items-center gap-1 text-xs text-blue-600">
-            <ExternalLink className="h-3 w-3" />
-            <span>Data from Wikimedia</span>
-          </div>
+        <div className="bg-blue-50 rounded-2xl p-4 max-h-44 overflow-y-auto">
+          <p className="max-w-none text-gray-700">
+            {historical}
+          </p>
         </div>
       </div>
-    </div>
+    </article>
   )
 }
