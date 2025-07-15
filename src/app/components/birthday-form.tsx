@@ -3,15 +3,15 @@
 import { useState } from "react"
 import { useCompletion } from "ai/react"
 
-import BirthdayGreeting from "./birthday-greeting"
 import { ArrowRight, Calendar, Loader2, MapPin, User } from "lucide-react"
-import BirthdayHistorical from "./birthday-historical"
-import BirthdayOffers from "./birthday-offers"
+
+import BentoGrid from "./bento-grid"
+
 
 export default function BirthdayForm() {
-  const [dateBirthday, setDateBirthday] = useState<string>('')
-  const [name, setName] = useState<string>('')
-  const [city, setCity] = useState<string>('')
+  const [birthdayInput, setBirthdayInput] = useState<string>('')
+  const [nameInput, setNameInput] = useState<string>('')
+  const [cityInput, setCityInput] = useState<string>('')
 
   const {
     completion,
@@ -24,14 +24,13 @@ export default function BirthdayForm() {
 
   async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault()
-
     setCompletion('')
     try {
       await complete('', {
         body: {
-          name: name,
-          birthday: dateBirthday,
-          city: city
+          name: nameInput,
+          birthday: birthdayInput,
+          city: cityInput
         }
       })
     } catch (error) {
@@ -45,7 +44,7 @@ export default function BirthdayForm() {
           onSubmit={handleSubmit}
         >
           <div className="space-y-2">
-            <label htmlFor="namelabel" className="text-sm font-medium text-gray-700 flex items-center gap-2">
+            <label htmlFor="nameID" className="text-sm font-medium text-gray-700 flex items-center gap-2">
               <div className="w-5 h-5 bg-blue-100 rounded-full flex items-center justify-center">
                 <User className="h-3 w-3 text-blue-600" />
               </div>
@@ -53,15 +52,16 @@ export default function BirthdayForm() {
             </label>
             <input
               type="text"
-              id="namelabel"
+              id="nameID"
               placeholder="Escribe tu nombre"
               className="w-full h-12 px-4 rounded-xl border border-gray-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 focus:outline-none text-gray-900 placeholder:text-gray-400 transition-colors"
-              onChange={(e) => setName(e.target.value)}
+              value={nameInput}
+              onChange={(e) => setNameInput(e.target.value)}
               disabled={isLoading}
             />
           </div>
           <div className="space-y-2">
-            <label htmlFor="birthday" className="text-sm font-medium text-gray-700 flex items-center gap-2">
+            <label htmlFor="birthID" className="text-sm font-medium text-gray-700 flex items-center gap-2">
               <div className="w-5 h-5 bg-purple-100 rounded-full flex items-center justify-center">
                 <Calendar className="h-3 w-3 text-purple-600" />
               </div>
@@ -69,15 +69,16 @@ export default function BirthdayForm() {
             </label>
             <input
               type="date"
-              id="birthday"
+              id="birthID"
               data-date-format="YYYY-MM-DD"
               className="w-full h-12 px-4 rounded-xl border border-gray-200 focus:border-purple-500 focus:ring-2 focus:ring-purple-500/20 focus:outline-none text-gray-900 transition-colors"
-              onChange={(e) => setDateBirthday(e.target.value)}
+              onChange={(e) => setBirthdayInput(e.target.value)}
+              value={birthdayInput}
               disabled={isLoading}
             />
           </div>
           <div className="space-y-2">
-            <label htmlFor="city" className="text-sm font-medium text-gray-700 flex items-center gap-2">
+            <label htmlFor="cityID" className="text-sm font-medium text-gray-700 flex items-center gap-2">
               <div className="w-5 h-5 bg-green-100 rounded-full flex items-center justify-center">
                 <MapPin className="h-3 w-3 text-green-600" />
               </div>
@@ -85,10 +86,11 @@ export default function BirthdayForm() {
             </label>
             <input
               type="text"
-              id="city"
+              id="cityID"
               placeholder="Escribe tu ciudad"
               className="w-full h-12 px-4 rounded-xl border border-gray-200 focus:border-green-500 focus:ring-2 focus:ring-green-500/20 focus:outline-none text-gray-900 transition-colors"
-              onChange={(e) => setCity(e.target.value)}
+              onChange={(e) => setCityInput(e.target.value)}
+              value={cityInput}
               disabled={isLoading}
             />
           </div>
@@ -114,15 +116,19 @@ export default function BirthdayForm() {
         </form>
       </div>
       {/* Response */}
-      {/* {
-          completion && completion.length > 0 && ( */}
-      <section className="grid grid-cols-1 md:grid-cols-4 lg:grid-cols-6 gap-4 auto-rows-min">
-        <BirthdayGreeting content={completion} name={name} birthday={dateBirthday} />
-        <BirthdayHistorical content={completion} />
-        <BirthdayOffers />
-      </section>
-      {/* )
-        } */}
+      {
+        completion && completion.length > 0 &&
+        (
+          <section className="grid grid-cols-1 md:grid-cols-4 lg:grid-cols-6 gap-4 auto-rows-min">
+            <BentoGrid
+              content={completion}
+              name={nameInput}
+              birthday={birthdayInput}
+              city={cityInput}
+            />
+          </section>
+        )
+      }
     </>
   );
 }
