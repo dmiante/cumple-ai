@@ -17,7 +17,7 @@ export default function BentoGrid({ content, name, birthday, city }: BentoGridPr
   const phrase = content?.split('## ')
 
   const greetingSection = phrase[1]?.split('Frase: ')[1] || ''
-  const historicalSection = phrase[2]?.split('Hecho: ')[1] || ''
+  const historicalSection = phrase[2]?.split('Evento: ')[1] || ''
 
   let offerSection = []
   if (phrase[3]) {
