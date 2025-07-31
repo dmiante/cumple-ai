@@ -29,7 +29,7 @@ export default function BirthdayOffers({ offers = [], city }: BirthdayOffersProp
           </div>
         </div>
       </article>
-      <article className="md:col-span-2 lg:col-span-full bg-gradient-to-br from-emerald-500 to-teal-600 rounded-3xl p-6 shadow-sm border border-gray-100 relative overflow-hidden">
+      <article className="md:col-span-4 lg:col-span-full bg-gradient-to-br from-emerald-500 to-teal-600 rounded-3xl p-6 shadow-sm border border-gray-100 relative overflow-hidden">
         <div>
           <div className="flex items-center gap-3 mb-4">
             <div className="w-12 h-12 bg-white/20 backdrop-blur-sm rounded-2xl flex items-center justify-center">
@@ -51,12 +51,13 @@ export default function BirthdayOffers({ offers = [], city }: BirthdayOffersProp
               offers && offers.length > 0 ? (
                 offers.map(({ name, offer, requirements }) => (
                   <li key={name} className='bg-green-50 rounded-2xl p-4'>
-                    <div className='flex text-gray-600'>
-                      <div className='flex flex-col justify-center p-4 w-80 gap-4'>
-                        <h3 className='font-bold font-mono text-xl'>{name}</h3>
+                    <div className='flex text-gray-600 flex-col gap-4'>
+                      <div className='flex flex-col justify-center items-center p-4 w-full gap-2 border-b-2 border-b-green-600/10'>
+                        <h3 className='font-bold font-mono text-2xl'>{name}</h3>
                         <p>{offer}</p>
                       </div>
                       <div className='flex-1 p-4'>
+                        <h3 className='font-bold font-mono text-lg'>¿Como lo canjeas?</h3>
                         <p>{requirements}</p>
                       </div>
                     </div>

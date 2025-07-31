@@ -46,7 +46,7 @@ function BirthdayGreeting({ greeting, name, birthday }: BirthdayGreetingProps) {
           </div>
         </div>
       </article>
-      <article className='overflow-hidden rounded-3xl bg-gradient-to-br from-purple-500 to-indigo-600 p-6 text-white shadow-lg md:col-span-2 lg:col-span-2'>
+      <article className='rounded-3xl bg-gradient-to-br from-purple-500 to-indigo-600 p-6 text-white shadow-lg md:col-span-4 lg:col-span-2'>
         <div className='flex flex-col justify-between h-full'>
           <div className='flex h-12 w-12 items-center justify-center rounded-2xl bg-white/20 backdrop-blur-sm'>
             <Calendar className='h-6 w-6' />

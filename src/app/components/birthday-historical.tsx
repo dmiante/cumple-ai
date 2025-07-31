@@ -3,7 +3,7 @@
 import { Clock } from "lucide-react"
 
 interface BirthdayHistoricalProps {
-  historical: string | null
+  historical: string
 }
 
 export default function BirthdayHistorical({ historical }: BirthdayHistoricalProps) {
@@ -21,9 +21,15 @@ export default function BirthdayHistorical({ historical }: BirthdayHistoricalPro
         </div>
 
         <div className="bg-blue-50 rounded-2xl p-4 max-h-44 overflow-y-auto">
-          <p className="max-w-none text-gray-700">
-            {historical}
-          </p>
+          {
+            historical ? (
+              <p className="max-w-none text-gray-700">
+                {historical}
+              </p>
+            ) : (
+              <p className="text-gray-700">No se encontraron eventos</p>
+            )
+          }
         </div>
       </div>
     </article>
