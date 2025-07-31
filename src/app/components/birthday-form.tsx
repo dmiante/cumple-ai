@@ -3,26 +3,37 @@
 import { useState } from "react"
 import { useCompletion } from "ai/react"
 
-import { ArrowRight, Calendar, Loader2, MapPin, User } from "lucide-react"
+import { AlertCircle, ArrowRight, Calendar, Loader2, MapPin, User } from "lucide-react"
 
 import BentoGrid from "./bento-grid"
 
 
 export default function BirthdayForm() {
-  const [birthdayInput, setBirthdayInput] = useState<string>('')
-  const [nameInput, setNameInput] = useState<string>('')
-  const [cityInput, setCityInput] = useState<string>('')
+  const [birthdayInput, setBirthdayInput] = useState<string>('1993-08-02')
+  const [nameInput, setNameInput] = useState<string>('Damian')
+  const [cityInput, setCityInput] = useState<string>('Santiago')
 
   const {
     completion,
     setCompletion,
     complete,
-    isLoading
+    isLoading,
+    error,
+    stop
   } = useCompletion({
-    api: '/api/facts'
+    api: '/api/facts',
+    onResponse: (response) => {
+      console.log('Response received: ', response.status)
+    },
+    onFinish: (prompt, completion) => {
+      console.log('Completion finished: ', { prompt: prompt.substring(0, 100), completionLength: completion.length })
+    },
+    onError: (error) => {
+      console.error('Completion error: ', error.message)
+    }
   })
 
-  async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
+  async function handleSubmitForm(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault()
     setCompletion('')
     try {
@@ -38,10 +49,16 @@ export default function BirthdayForm() {
     }
   }
   return (
-    <>
+    <div className="space-y-6">
+      {error && (
+        <div className="rounded-xl border border-red-200 bg-red-50 p-4 flex items-start gap-3">
+          <AlertCircle className="h-4 w-4 text-red-600 mt-0.5 flex-shrink-0" />
+          <div className="text-sm text-red-800">Oops! Un error inesperado ha ocurrido. Intentalo de nuevo.</div>
+        </div>
+      )}
       <div className="bg-white rounded-3xl p-6 shadow-sm border border-gray-100 max-w-md mx-auto">
         <form className="space-y-5"
-          onSubmit={handleSubmit}
+          onSubmit={handleSubmitForm}
         >
           <div className="space-y-2">
             <label htmlFor="nameID" className="text-sm font-medium text-gray-700 flex items-center gap-2">
@@ -94,30 +111,42 @@ export default function BirthdayForm() {
               disabled={isLoading}
             />
           </div>
-          <button
-            type="submit"
-            className="w-full h-12 bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white font-medium rounded-xl shadow-lg shadow-blue-500/25 transition-all duration-200 hover:shadow-blue-500/40 hover:scale-[1.02] active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100 flex items-center justify-center gap-2"
-            disabled={isLoading}
-          >
-            {
-              isLoading ? (
-                <>
-                  Preparando...
-                  <Loader2 className="h-4 w-4 animate-spin" />
-                </>
-              ) : (
-                <>
-                  Buscar
-                  <ArrowRight className="h-4 w-4" />
-                </>
-              )
-            }
-          </button>
+          <div className="flex gap-3">
+            <button
+              type="submit"
+              className="w-full h-12 bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white font-medium rounded-xl shadow-lg shadow-blue-500/25 transition-all duration-200 hover:shadow-blue-500/40 hover:scale-[1.02] active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100 flex items-center justify-center gap-2"
+              disabled={isLoading}
+            >
+              {
+                isLoading ? (
+                  <>
+                    Generando...
+                    <Loader2 className="h-4 w-4 animate-spin" />
+                  </>
+                ) : (
+                  <>
+                    Buscar
+                    <ArrowRight className="h-4 w-4" />
+                  </>
+                )
+              }
+            </button>
+
+            {isLoading && (
+              <button
+                type="button"
+                onClick={() => { stop() }}
+                className="h-12 px-4 bg-red-500 hover:bg-red-600 text-white font-medium rounded-xl shadow-lg transition-all duration-200 hover:shadow-red-500/40 flex items-center justify-center"
+              >
+                Stop
+              </button>
+            )}
+          </div>
         </form>
       </div>
       {/* Response */}
       {
-        completion && completion.length > 0 &&
+        (completion || isLoading) &&
         (
           <section className="grid grid-cols-1 md:grid-cols-4 lg:grid-cols-6 gap-4 auto-rows-min">
             <BentoGrid
@@ -129,6 +158,6 @@ export default function BirthdayForm() {
           </section>
         )
       }
-    </>
+    </div>
   );
 }
