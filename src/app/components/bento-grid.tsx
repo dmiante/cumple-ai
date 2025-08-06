@@ -1,18 +1,20 @@
 'use client'
 
-import BirthdayGreeting from "./birthday-greeting"
-import BirthdayHistorical from "./birthday-historical"
-import BirthdayOffers from "./birthday-offers"
+import {CityImage} from '../models/CityImage'
+
+import BirthdayGreeting from './birthday-greeting'
+import BirthdayHistorical from './birthday-historical'
+import BirthdayOffers from './birthday-offers'
 
 interface BentoGridProps {
   content: string
   name: string
   birthday: string
   city: string
+  cityImage: CityImage | undefined
 }
 
-export default function BentoGrid({ content, name, birthday, city }: BentoGridProps) {
-
+export default function BentoGrid({content, name, birthday, city, cityImage}: BentoGridProps) {
   if (!content) return null
   const phrase = content?.split('## ')
 
@@ -20,8 +22,10 @@ export default function BentoGrid({ content, name, birthday, city }: BentoGridPr
   const historicalSection = phrase[2]?.split('Evento: ')[1] || ''
 
   let offerSection = []
+
   if (phrase[3]) {
     const str = phrase[3].split('Ofertas de cumpleaños')
+
     if (str[1]) {
       try {
         offerSection = JSON.parse(str[1])
@@ -34,9 +38,9 @@ export default function BentoGrid({ content, name, birthday, city }: BentoGridPr
 
   return (
     <>
-      <BirthdayGreeting greeting={greetingSection} name={name} birthday={birthday} />
+      <BirthdayGreeting birthday={birthday} greeting={greetingSection} name={name} />
       <BirthdayHistorical historical={historicalSection} />
-      <BirthdayOffers offers={offerSection} city={city} />
+      <BirthdayOffers city={city} cityImage={cityImage} offers={offerSection} />
     </>
   )
 }

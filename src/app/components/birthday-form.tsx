@@ -1,34 +1,31 @@
 'use client'
 
-import { useState } from "react"
-import { useCompletion } from "ai/react"
+import {useState} from 'react'
+import {useCompletion} from 'ai/react'
+import {AlertCircle, ArrowRight, Calendar, Loader2, MapPin, User} from 'lucide-react'
 
-import { AlertCircle, ArrowRight, Calendar, Loader2, MapPin, User } from "lucide-react"
+import {CityImage} from '../models/CityImage'
 
-import BentoGrid from "./bento-grid"
-
+import BentoGrid from './bento-grid'
 
 export default function BirthdayForm() {
   const [birthdayInput, setBirthdayInput] = useState<string>('1993-08-02')
   const [nameInput, setNameInput] = useState<string>('Damian')
   const [cityInput, setCityInput] = useState<string>('Santiago')
+  const [cityImage, setCityImage] = useState<CityImage | undefined>()
 
-  const {
-    completion,
-    setCompletion,
-    complete,
-    isLoading,
-    error,
-    stop
-  } = useCompletion({
+  const {completion, setCompletion, complete, isLoading, error, stop} = useCompletion({
     api: '/api/facts',
-    onResponse: (response) => {
+    onResponse: (response: Response) => {
       console.log('Response received: ', response.status)
     },
-    onFinish: (prompt, completion) => {
-      console.log('Completion finished: ', { prompt: prompt.substring(0, 100), completionLength: completion.length })
+    onFinish: (prompt: string, completion: string) => {
+      console.log('Completion finished: ', {
+        prompt: prompt.substring(0, 100),
+        completionLength: completion.length
+      })
     },
-    onError: (error) => {
+    onError: (error: Error) => {
       console.error('Completion error: ', error.message)
     }
   })
@@ -44,99 +41,117 @@ export default function BirthdayForm() {
           city: cityInput
         }
       })
+      const resp = await fetch('/api/photo', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({query: cityInput})
+      })
+      const data = await resp.json()
+
+      setCityImage(data)
     } catch (error) {
       console.error('Error in complete: ', error)
     }
   }
+
   return (
     <div className="space-y-6">
       {error && (
-        <div className="rounded-xl border border-red-200 bg-red-50 p-4 flex items-start gap-3">
-          <AlertCircle className="h-4 w-4 text-red-600 mt-0.5 flex-shrink-0" />
-          <div className="text-sm text-red-800">Oops! Un error inesperado ha ocurrido. Intentalo de nuevo.</div>
+        <div className="flex items-start gap-3 rounded-xl border border-red-200 bg-red-50 p-4">
+          <AlertCircle className="mt-0.5 h-4 w-4 flex-shrink-0 text-red-600" />
+          <div className="text-sm text-red-800">
+            Oops! Un error inesperado ha ocurrido. Intentalo de nuevo.
+          </div>
         </div>
       )}
-      <div className="bg-white rounded-3xl p-6 shadow-sm border border-gray-100 max-w-md mx-auto">
-        <form className="space-y-5"
-          onSubmit={handleSubmitForm}
-        >
+      <div className="mx-auto max-w-md rounded-3xl border border-gray-100 bg-white p-6 shadow-sm">
+        <form className="space-y-5" onSubmit={handleSubmitForm}>
           <div className="space-y-2">
-            <label htmlFor="nameID" className="text-sm font-medium text-gray-700 flex items-center gap-2">
-              <div className="w-5 h-5 bg-blue-100 rounded-full flex items-center justify-center">
+            <label
+              className="flex items-center gap-2 text-sm font-medium text-gray-700"
+              htmlFor="nameID"
+            >
+              <div className="flex h-5 w-5 items-center justify-center rounded-full bg-blue-100">
                 <User className="h-3 w-3 text-blue-600" />
               </div>
               Tú nombre
             </label>
             <input
-              type="text"
+              className="h-12 w-full rounded-xl border border-gray-200 px-4 text-gray-900 transition-colors placeholder:text-gray-400 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20"
+              disabled={isLoading}
               id="nameID"
               placeholder="Escribe tu nombre"
-              className="w-full h-12 px-4 rounded-xl border border-gray-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 focus:outline-none text-gray-900 placeholder:text-gray-400 transition-colors"
+              type="text"
               value={nameInput}
               onChange={(e) => setNameInput(e.target.value)}
-              disabled={isLoading}
             />
           </div>
           <div className="space-y-2">
-            <label htmlFor="birthID" className="text-sm font-medium text-gray-700 flex items-center gap-2">
-              <div className="w-5 h-5 bg-purple-100 rounded-full flex items-center justify-center">
+            <label
+              className="flex items-center gap-2 text-sm font-medium text-gray-700"
+              htmlFor="birthID"
+            >
+              <div className="flex h-5 w-5 items-center justify-center rounded-full bg-purple-100">
                 <Calendar className="h-3 w-3 text-purple-600" />
               </div>
               Tú Día de Cumpleaños
             </label>
             <input
-              type="date"
-              id="birthID"
+              className="h-12 w-full rounded-xl border border-gray-200 px-4 text-gray-900 transition-colors focus:border-purple-500 focus:outline-none focus:ring-2 focus:ring-purple-500/20"
               data-date-format="YYYY-MM-DD"
-              className="w-full h-12 px-4 rounded-xl border border-gray-200 focus:border-purple-500 focus:ring-2 focus:ring-purple-500/20 focus:outline-none text-gray-900 transition-colors"
-              onChange={(e) => setBirthdayInput(e.target.value)}
-              value={birthdayInput}
               disabled={isLoading}
+              id="birthID"
+              type="date"
+              value={birthdayInput}
+              onChange={(e) => setBirthdayInput(e.target.value)}
             />
           </div>
           <div className="space-y-2">
-            <label htmlFor="cityID" className="text-sm font-medium text-gray-700 flex items-center gap-2">
-              <div className="w-5 h-5 bg-green-100 rounded-full flex items-center justify-center">
+            <label
+              className="flex items-center gap-2 text-sm font-medium text-gray-700"
+              htmlFor="cityID"
+            >
+              <div className="flex h-5 w-5 items-center justify-center rounded-full bg-green-100">
                 <MapPin className="h-3 w-3 text-green-600" />
               </div>
               Tú Ciudad
             </label>
             <input
-              type="text"
+              className="h-12 w-full rounded-xl border border-gray-200 px-4 text-gray-900 transition-colors focus:border-green-500 focus:outline-none focus:ring-2 focus:ring-green-500/20"
+              disabled={isLoading}
               id="cityID"
               placeholder="Escribe tu ciudad"
-              className="w-full h-12 px-4 rounded-xl border border-gray-200 focus:border-green-500 focus:ring-2 focus:ring-green-500/20 focus:outline-none text-gray-900 transition-colors"
-              onChange={(e) => setCityInput(e.target.value)}
+              type="text"
               value={cityInput}
-              disabled={isLoading}
+              onChange={(e) => setCityInput(e.target.value)}
             />
           </div>
           <div className="flex gap-3">
             <button
-              type="submit"
-              className="w-full h-12 bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white font-medium rounded-xl shadow-lg shadow-blue-500/25 transition-all duration-200 hover:shadow-blue-500/40 hover:scale-[1.02] active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100 flex items-center justify-center gap-2"
+              className="flex h-12 w-full items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-blue-500 to-purple-600 font-medium text-white shadow-lg shadow-blue-500/25 transition-all duration-200 hover:scale-[1.02] hover:from-blue-600 hover:to-purple-700 hover:shadow-blue-500/40 active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:scale-100"
               disabled={isLoading}
+              type="submit"
             >
-              {
-                isLoading ? (
-                  <>
-                    Generando...
-                    <Loader2 className="h-4 w-4 animate-spin" />
-                  </>
-                ) : (
-                  <>
-                    Buscar
-                    <ArrowRight className="h-4 w-4" />
-                  </>
-                )
-              }
+              {isLoading ? (
+                <>
+                  Generando...
+                  <Loader2 className="h-4 w-4 animate-spin" />
+                </>
+              ) : (
+                <>
+                  Buscar
+                  <ArrowRight className="h-4 w-4" />
+                </>
+              )}
             </button>
 
             {isLoading && (
               <button
+                className="flex h-12 items-center justify-center rounded-xl bg-red-500 px-4 font-medium text-white shadow-lg transition-all duration-200 hover:bg-red-600 hover:shadow-red-500/40"
                 type="button"
-                onClick={() => { stop() }}
-                className="h-12 px-4 bg-red-500 hover:bg-red-600 text-white font-medium rounded-xl shadow-lg transition-all duration-200 hover:shadow-red-500/40 flex items-center justify-center"
+                onClick={() => {
+                  stop()
+                }}
               >
                 Stop
               </button>
@@ -145,19 +160,17 @@ export default function BirthdayForm() {
         </form>
       </div>
       {/* Response */}
-      {
-        (completion || isLoading) &&
-        (
-          <section className="grid grid-cols-1 md:grid-cols-4 lg:grid-cols-6 gap-4 auto-rows-min">
-            <BentoGrid
-              content={completion}
-              name={nameInput}
-              birthday={birthdayInput}
-              city={cityInput}
-            />
-          </section>
-        )
-      }
+      {(completion || isLoading) && (
+        <section className="grid auto-rows-min grid-cols-1 gap-4 md:grid-cols-4 lg:grid-cols-6">
+          <BentoGrid
+            birthday={birthdayInput}
+            city={cityInput}
+            cityImage={cityImage}
+            content={completion}
+            name={nameInput}
+          />
+        </section>
+      )}
     </div>
-  );
+  )
 }
