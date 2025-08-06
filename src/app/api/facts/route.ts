@@ -1,52 +1,31 @@
-import { google } from '@ai-sdk/google'
-// import { ollama } from 'ollama-ai-provider'
-// import { deepseek } from '@ai-sdk/deepseek'
-import { generateText, streamText, tool } from 'ai'
-import { z } from 'zod'
+import {google} from '@ai-sdk/google'
+import {streamText} from 'ai'
 
-const fetchHistoricalEvent = async (day: number, month: number) => {
-  try {
-    const resp = await fetch(`http://numbersapi.com/${month}/${day}/date`)
-    if (resp.ok) {
-      console.log(`API responded with status: ${resp.status}`)
-    } else {
-      console.error(`API responded with status: ${resp.status}`)
-    }
-    const data = await resp.text()
-    return { message: data }
-  } catch (error) {
-    console.error('Error fetching from API:', error)
-    return null
-  }
-}
+import {fetchHistoricalEvent} from '@/app/lib/services'
 
 export async function POST(req: Request) {
   try {
-    // const { prompt }: { prompt: string } = await req.json()
     const body = await req.json()
-    const { name, birthday, city } = body
+    const {name, birthday, city} = body
 
     const birthDate = new Date(birthday)
     const month = birthDate.getMonth() + 1
     const day = birthDate.getDate() + 1
-    console.log('day: ', day)
 
-    const apiResponse = await fetchHistoricalEvent(day, month)
-    const messageEvent = apiResponse?.message
-    console.log(messageEvent)
+    const apiRespHistorical = await fetchHistoricalEvent(day, month)
+    const messageEvent = apiRespHistorical?.message
 
     if (!messageEvent) {
       return Response.json(
         {
           error: 'Failed to fetch historical events from the API'
         },
-        { status: 500 }
+        {status: 500}
       )
     }
 
     const result = streamText({
-      model: google('gemini-2.5-flash', { useSearchGrounding: true }),
-      // model: ollama('llama3.2:3b'),
+      model: google('gemini-2.5-flash', {useSearchGrounding: true}),
       prompt: `
           Crea una frase que sea una felicitación de cumpleaños cálida y personalizada para ${name}. Hazla alegre, festiva y cercana. Asegúrate de que sea una frase para enviar a otra persona cercana.
           Muestra el evento historico proporcionado.
@@ -62,7 +41,7 @@ export async function POST(req: Request) {
 
           ## Evento histórico
           NO crees un evento historico. Solo muestra la respuesta de abajo y traducelo al español.
-          
+
           - Evento: ${messageEvent}
 
           ## Ofertas de cumpleaños
@@ -86,20 +65,16 @@ export async function POST(req: Request) {
       temperature: 0.7
     })
 
-    // console.log('RESULT: ', (await result).textStream)
-    // for await (const textPart of result.textStream) {
-    //   console.log(textPart)
-    // }
-
     return result.toDataStreamResponse()
   } catch (error) {
     console.error('❌ API Error: ', error)
+
     return new Response(
       JSON.stringify({
         error: 'Failed to generate birthday events',
         details: error instanceof Error ? error.message : 'Unknown error'
       }),
-      { status: 500, headers: { 'Content-Type': 'application/json' } }
+      {status: 500, headers: {'Content-Type': 'application/json'}}
     )
   }
 }
