@@ -1,8 +1,6 @@
 import {google} from '@ai-sdk/google'
 import {streamText} from 'ai'
 
-import {fetchHistoricalEvent} from '@/app/lib/services'
-
 export async function POST(req: Request) {
   try {
     const body = await req.json()
@@ -12,17 +10,10 @@ export async function POST(req: Request) {
     const month = birthDate.getMonth() + 1
     const day = birthDate.getDate() + 1
 
-    const apiRespHistorical = await fetchHistoricalEvent(day, month)
-    const messageEvent = apiRespHistorical?.message
+    const apiRespHistorical = await fetch(`http://numbersapi.com/${month}/${day}/date`)
 
-    if (!messageEvent) {
-      return Response.json(
-        {
-          error: 'Failed to fetch historical events from the API'
-        },
-        {status: 500}
-      )
-    }
+    if (!apiRespHistorical.ok) throw new Error('Failed to fetch historical events from the API!')
+    const messageEvent = await apiRespHistorical.text()
 
     const result = streamText({
       model: google('gemini-2.5-flash', {useSearchGrounding: true}),
