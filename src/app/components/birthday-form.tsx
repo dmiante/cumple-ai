@@ -1,8 +1,9 @@
 'use client'
 
 import {useState} from 'react'
-import {useCompletion} from 'ai/react'
+import {useCompletion} from '@ai-sdk/react'
 import {AlertCircle, ArrowRight, Calendar, Loader2, MapPin, User} from 'lucide-react'
+import {toast} from 'sonner'
 
 import {CityImage} from '../models/CityImage'
 
@@ -16,16 +17,11 @@ export default function BirthdayForm() {
 
   const {completion, setCompletion, complete, isLoading, error, stop} = useCompletion({
     api: '/api/facts',
-    onResponse: (response: Response) => {
-      console.log('Response received: ', response.status)
-    },
-    onFinish: (prompt: string, completion: string) => {
-      console.log('Completion finished: ', {
-        prompt: prompt.substring(0, 100),
-        completionLength: completion.length
-      })
+    onFinish: () => {
+      toast.success('Completion finished')
     },
     onError: (error: Error) => {
+      toast.error('Completion error')
       console.error('Completion error: ', error.message)
     }
   })
