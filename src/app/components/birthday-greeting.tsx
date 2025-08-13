@@ -46,12 +46,12 @@ function BirthdayGreeting({greeting, name, birthday}: BirthdayGreetingProps) {
         </div>
       </article>
       <article className="rounded-3xl bg-gradient-to-br from-purple-500 to-indigo-600 p-6 text-white shadow-lg md:col-span-4 lg:col-span-2">
-        <div className="flex h-full flex-col justify-between">
+        <div className="flex items-center gap-4">
           <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-white/20 backdrop-blur-sm">
             <Calendar className="h-6 w-6" />
           </div>
-          <div className="mb-4">
-            <h2 className="mb-2 text-2xl font-bold">{formatDate(birthday)}</h2>
+          <div className="flex flex-col">
+            <h2 className="text-2xl font-bold">{formatDate(birthday)}</h2>
             <div className="flex items-center gap-1 text-sm text-purple-100">
               <Sparkles className="h-4 w-4" />
               <span>Tú Día Especial!</span>
