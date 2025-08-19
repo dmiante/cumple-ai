@@ -16,7 +16,7 @@ export async function POST(req: Request) {
     const messageEvent = await apiRespHistorical.text()
 
     const result = streamText({
-      model: google('gemini-2.5-flash', {useSearchGrounding: true}),
+      model: google('gemini-2.5-flash'),
       prompt: `
           Crea una frase que sea una felicitación de cumpleaños cálida y personalizada para ${name}. Hazla alegre, festiva y cercana. Asegúrate de que sea una frase para enviar a otra persona cercana.
           Muestra el evento historico proporcionado.
@@ -52,11 +52,13 @@ export async function POST(req: Request) {
 
           IMPORTANTE: Usa un formato Markdown para la respuesta. Asegúrate que cada seccion sea claramente marcada con encabezados con ## y usa guiones (-) para las listas. Sé especifico sobre las ofertas gratis y los requisitos.
           `,
-      maxSteps: 5,
-      temperature: 0.7
+      temperature: 0.7,
+      tools: {
+        google_search: google.tools.googleSearch({})
+      }
     })
 
-    return result.toDataStreamResponse()
+    return result.toUIMessageStreamResponse()
   } catch (error) {
     console.error('❌ API Error: ', error)
 
