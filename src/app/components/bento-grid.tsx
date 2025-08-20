@@ -12,9 +12,17 @@ interface BentoGridProps {
   birthday: string
   city: string
   cityImage: CityImage | undefined
+  isStreaming: boolean
 }
 
-export default function BentoGrid({content, name, birthday, city, cityImage}: BentoGridProps) {
+export default function BentoGrid({
+  content,
+  name,
+  birthday,
+  city,
+  cityImage,
+  isStreaming
+}: BentoGridProps) {
   if (!content) return null
   const phrase = content?.split('## ')
 
@@ -38,9 +46,19 @@ export default function BentoGrid({content, name, birthday, city, cityImage}: Be
 
   return (
     <>
-      <BirthdayGreeting birthday={birthday} greeting={greetingSection} name={name} />
-      <BirthdayHistorical historical={historicalSection} />
-      <BirthdayOffers city={city} cityImage={cityImage} offers={offerSection} />
+      <BirthdayGreeting
+        birthday={birthday}
+        greeting={greetingSection}
+        isStreaming={isStreaming}
+        name={name}
+      />
+      <BirthdayHistorical historical={historicalSection} isStreaming={isStreaming} />
+      <BirthdayOffers
+        city={city}
+        cityImage={cityImage}
+        isStreaming={isStreaming}
+        offers={offerSection}
+      />
     </>
   )
 }

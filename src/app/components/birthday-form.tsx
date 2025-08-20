@@ -163,6 +163,7 @@ export default function BirthdayForm() {
             city={cityInput}
             cityImage={cityImage}
             content={completion}
+            isStreaming={isLoading}
             name={nameInput}
           />
         </section>
