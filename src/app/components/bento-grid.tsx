@@ -15,6 +15,12 @@ interface BentoGridProps {
   isStreaming: boolean
 }
 
+interface OffersList {
+  name: string
+  offer: string
+  requirements: string
+}
+
 export default function BentoGrid({
   content,
   name,
@@ -29,7 +35,7 @@ export default function BentoGrid({
   const greetingSection = phrase[1]?.split('Frase: ')[1] || ''
   const historicalSection = phrase[2]?.split('Evento: ')[1] || ''
 
-  let offerSection = []
+  let offerSection: OffersList[] = []
 
   if (phrase[3]) {
     const str = phrase[3].split('Ofertas de cumpleaños')
