@@ -1,9 +1,11 @@
 'use client'
 
-import {Calendar, CopyIcon, PartyPopper, Sparkles} from 'lucide-react'
+import {Calendar, PartyPopper, Sparkles} from 'lucide-react'
+
+import {CopyButton} from '../utils/CopyButton'
 
 interface BirthdayGreetingProps {
-  greeting: string | null
+  greeting: string
   name: string
   birthday: string
   isStreaming: boolean
@@ -22,29 +24,22 @@ function BirthdayGreeting({greeting, name, birthday, isStreaming}: BirthdayGreet
     <>
       {!isStreaming ? (
         <article className="overflow-hidden rounded-3xl bg-gradient-to-br from-pink-500 via-rose-500 to-orange-500 p-6 text-white shadow-lg md:col-span-4 lg:col-span-4">
-          <div>
-            <div className="mb-4 flex items-center gap-3">
+          <div className="flex flex-col gap-4">
+            <div className="flex items-center gap-3">
               <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-white/20 backdrop-blur-sm">
                 <PartyPopper className="h-6 w-6" />
               </div>
-              <div>
-                <h2 className="text-2xl font-bold">
-                  Feliz Cumpleaños,
-                  <span className="font-bold"> {name}!</span>
-                </h2>
-              </div>
-              <div className="ml-auto">
-                <button className="rounded-lg bg-white px-3 py-3 text-black shadow-md">
-                  <CopyIcon className="h-6 w-6" />
-                </button>
-              </div>
+              <h2 className="text-2xl font-bold">
+                Feliz Cumpleaños,
+                <span className="font-bold"> {name}!</span>
+              </h2>
             </div>
-
             <div className="rounded-2xl bg-white/10 p-4 backdrop-blur-sm">
               <div className="max-w-none text-white">
                 <p className="leading-relaxed">{greeting}</p>
               </div>
             </div>
+            <CopyButton text={greeting} />
           </div>
         </article>
       ) : (
