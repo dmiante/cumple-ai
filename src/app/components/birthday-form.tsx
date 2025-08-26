@@ -51,7 +51,7 @@ export default function BirthdayForm() {
   }
 
   return (
-    <div className="space-y-6">
+    <>
       {error && (
         <div className="flex items-start gap-3 rounded-xl border border-red-200 bg-red-50 p-4">
           <AlertCircle className="mt-0.5 h-4 w-4 flex-shrink-0 text-red-600" />
@@ -60,7 +60,7 @@ export default function BirthdayForm() {
           </div>
         </div>
       )}
-      <div className="mx-auto max-w-md rounded-3xl border border-gray-100 bg-white p-6 shadow-sm">
+      <section className="mx-auto max-w-md rounded-3xl border border-gray-100 bg-white p-6 shadow-sm">
         <form className="space-y-5" onSubmit={handleSubmitForm}>
           <div className="space-y-2">
             <label
@@ -154,7 +154,7 @@ export default function BirthdayForm() {
             )}
           </div>
         </form>
-      </div>
+      </section>
       {/* Response */}
       {(completion || isLoading) && (
         <section className="grid auto-rows-min grid-cols-1 gap-4 md:grid-cols-4 lg:grid-cols-6">
@@ -168,6 +168,6 @@ export default function BirthdayForm() {
           />
         </section>
       )}
-    </div>
+    </>
   )
 }
