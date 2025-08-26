@@ -7,7 +7,7 @@ import BirthdayForm from './components/birthday-form'
 export default function Home() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50">
-      <div className="container mx-auto max-w-4xl px-4 py-8">
+      <div className="container mx-auto px-4 py-8 lg:max-w-5xl">
         <header className="mb-8 text-center">
           <h1 className="mb-8 text-7xl font-extrabold text-gray-900">
             Cumple<span className="text-pink-700">AI</span>
@@ -21,7 +21,7 @@ export default function Home() {
           {/* Birthday Form */}
           <BirthdayForm />
         </main>
-        <Toaster richColors />
+        <Toaster richColors position="bottom-center" />
         <footer className="mt-12 text-center">
           <div className="flex items-center justify-center gap-1 text-xs text-gray-500">
             <p>Built by Dmiante 🦁</p>
