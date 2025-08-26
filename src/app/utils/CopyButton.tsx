@@ -32,11 +32,11 @@ export function CopyButton({text, label, className}: CopyButtonProps) {
     <div className={`group relative ${className || ''}`}>
       <button
         aria-label={label ? `Copy ${label}` : 'Copy to clipboard'}
-        className="flex h-14 w-full items-center justify-center gap-6 rounded-xl bg-gradient-to-r from-violet-600 to-indigo-600 px-2 py-2 font-medium text-white shadow-lg transition-all duration-200 hover:bg-white/50"
+        className="flex h-14 w-full items-center justify-center gap-6 rounded-xl bg-gradient-to-r from-violet-600 to-indigo-600 px-2 py-2 font-medium text-white shadow-lg transition-all duration-200 hover:scale-[1.01] hover:shadow-blue-500/40"
         onClick={copyToClipboard}
       >
-        <span className="font-medium capitalize transition-all duration-300">
-          {copied ? 'Mensaje copiado!' : 'Copia el mensaje y compartelo!'}
+        <span className="font-medium transition-all duration-300">
+          {copied ? 'Mensaje copiado!' : 'Copia el mensaje y felicita a un amigo/a!'}
         </span>
         <div className="relative">
           <Copy
