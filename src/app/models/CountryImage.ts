@@ -1,7 +1,7 @@
 import z from 'zod'
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-const CityImageSchema = z.object({
+const CountryImageSchema = z.object({
   id: z.number(),
   width: z.number(),
   height: z.number(),
@@ -20,4 +20,4 @@ const CityImageSchema = z.object({
   alt: z.string()
 })
 
-export type CityImage = z.infer<typeof CityImageSchema>
+export type CountryImage = z.infer<typeof CountryImageSchema>
