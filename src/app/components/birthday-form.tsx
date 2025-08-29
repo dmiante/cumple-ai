@@ -5,8 +5,8 @@ import {useCompletion} from '@ai-sdk/react'
 import {AlertCircle, ArrowRight, Calendar, Loader2, MapPin, User} from 'lucide-react'
 import {toast} from 'sonner'
 
-import {CityImage} from '../models/CityImage'
 import {countries} from '../lib/constants'
+import {CountryImage} from '../models/CountryImage'
 
 import BentoGrid from './bento-grid'
 
@@ -14,8 +14,8 @@ export default function BirthdayForm() {
   const [birthdayInput, setBirthdayInput] = useState<string>('')
   const [nameInput, setNameInput] = useState<string>('')
   const [selectedCountry, setSelectedCountry] = useState('')
-  const [countrySelect, setCountrySelect] = useState('')
-  const [cityImage, setCityImage] = useState<CityImage | undefined>()
+  const [countryName, setCountryName] = useState('')
+  const [countryImage, setCountryImage] = useState<CountryImage | undefined>()
 
   const {completion, setCompletion, complete, isLoading, error, stop} = useCompletion({
     api: '/api/facts',
@@ -36,17 +36,17 @@ export default function BirthdayForm() {
         body: {
           name: nameInput,
           birthday: birthdayInput,
-          city: countrySelect
+          country: countryName
         }
       })
       const resp = await fetch('/api/photo', {
         method: 'POST',
         headers: {'Content-Type': 'application/json'},
-        body: JSON.stringify({query: countrySelect})
+        body: JSON.stringify({query: countryName})
       })
       const data = await resp.json()
 
-      setCityImage(data)
+      setCountryImage(data)
     } catch (error) {
       console.error('Error in complete: ', error)
     }
@@ -57,7 +57,7 @@ export default function BirthdayForm() {
     const countryName = countries.find((country) => country.id === countryId)?.name || ''
 
     setSelectedCountry(countryId)
-    setCountrySelect(countryName)
+    setCountryName(countryName)
   }
 
   return (
@@ -86,7 +86,7 @@ export default function BirthdayForm() {
               className="h-12 w-full rounded-xl border border-gray-200 px-4 text-gray-900 transition-colors placeholder:text-gray-400 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20"
               disabled={isLoading}
               id="nameID"
-              placeholder="Escribe el nombre de la persona a felicitar"
+              placeholder="Escribe el nombre"
               type="text"
               value={nameInput}
               onChange={(e) => setNameInput(e.target.value)}
@@ -174,9 +174,9 @@ export default function BirthdayForm() {
         <section className="grid auto-rows-min grid-cols-1 gap-4 md:grid-cols-4 lg:grid-cols-6">
           <BentoGrid
             birthday={birthdayInput}
-            city={selectedCountry}
-            cityImage={cityImage}
             content={completion}
+            country={countryName}
+            countryImage={countryImage}
             isStreaming={isLoading}
             name={nameInput}
           />

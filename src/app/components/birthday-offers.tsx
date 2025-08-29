@@ -2,7 +2,7 @@
 
 import {Gift, MapPin, Tag} from 'lucide-react'
 
-import {CityImage} from '../models/CityImage'
+import {CountryImage} from '../models/CountryImage'
 
 type Offer = {
   name: string
@@ -11,25 +11,25 @@ type Offer = {
 }
 
 interface BirthdayOffersProps {
-  offers?: Offer[]
-  city: string
-  cityImage: CityImage | undefined
+  offers?: Offer[] | null
+  country: string
+  countryImage: CountryImage | undefined
   isStreaming: boolean
 }
 
 export default function BirthdayOffers({
   offers = [],
-  city,
-  cityImage,
+  country,
+  countryImage,
   isStreaming
 }: BirthdayOffersProps) {
   return !isStreaming ? (
     <>
       <article className="group relative block h-96 overflow-hidden rounded-3xl border border-gray-100 bg-white shadow-sm md:col-span-4 lg:col-span-3">
         <img
-          alt={cityImage?.alt}
+          alt={countryImage?.alt}
           className="absolute inset-0 h-full w-full object-cover"
-          src={cityImage?.src.landscape}
+          src={countryImage?.src.landscape}
         />
         <div className="relative p-6">
           <div className="flex gap-3">
@@ -37,7 +37,7 @@ export default function BirthdayOffers({
               <MapPin className="h-6 w-6 text-orange-600" />
             </div>
             <div className="flex items-center rounded-2xl bg-orange-100 px-6">
-              <h3 className="text-xl font-semibold text-orange-600">{city}</h3>
+              <h3 className="text-xl font-semibold text-orange-600">{country}</h3>
             </div>
           </div>
         </div>
@@ -61,7 +61,7 @@ export default function BirthdayOffers({
             <div className="my-4 flex justify-center">
               <div className="flex w-fit items-center gap-2 rounded-full bg-white px-4 py-2 text-base font-bold text-emerald-600 shadow-sm lg:text-sm">
                 <Tag className="h-4 w-4" />
-                {offers.length} Ofertas GRATIS!
+                {offers?.length} Ofertas GRATIS!
               </div>
             </div>
           </div>

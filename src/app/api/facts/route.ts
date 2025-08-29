@@ -4,7 +4,7 @@ import {streamText} from 'ai'
 export async function POST(req: Request) {
   try {
     const body = await req.json()
-    const {name, birthday, city} = body
+    const {name, birthday, country} = body
 
     const birthDate = new Date(birthday)
     const month = birthDate.getMonth() + 1
@@ -20,7 +20,7 @@ export async function POST(req: Request) {
       prompt: `
           Crea una frase que sea una felicitación de cumpleaños cálida y personalizada para ${name}. Hazla alegre, festiva y cercana. Asegúrate de que sea una frase para enviar a otra persona cercana.
           Muestra el evento historico proporcionado.
-          Busca ofertas y/o productos gratis en tiendas para mi cumpleaños en la siguiente ciudad: ${city}
+          Busca ofertas y/o productos gratis en tiendas para mi cumpleaños en la siguiente ciudad: ${country}
           `,
       system: `
           Eres un asistente útil que proporciona información personalizada de cumpleaños.
@@ -36,7 +36,7 @@ export async function POST(req: Request) {
           - Evento: ${messageEvent}
 
           ## Ofertas de cumpleaños
-          Busca en internet mas de 3 lugares o tiendas que suelen ofrecer artículos, comidas o experiencias gratis a personas en su cumpleaños en ${city}.
+          Busca en internet mas de 3 lugares o tiendas que suelen ofrecer artículos, comidas o experiencias gratis a personas en su cumpleaños en ${country}.
           Simplemente responde con lo que encontraste.
           Para cada oferta, rellena el siguiente objeto y agrégalos a un array:
 
