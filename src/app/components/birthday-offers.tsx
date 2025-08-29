@@ -27,9 +27,9 @@ export default function BirthdayOffers({
     <>
       <article className="group relative block h-96 overflow-hidden rounded-3xl border border-gray-100 bg-white shadow-sm md:col-span-4 lg:col-span-3">
         <img
-          alt={countryImage?.alt}
+          alt={countryImage?.alt_description}
           className="absolute inset-0 h-full w-full object-cover"
-          src={countryImage?.src.landscape}
+          src={countryImage?.urls.regular}
         />
         <div className="relative p-6">
           <div className="flex gap-3">
