@@ -1,6 +1,8 @@
 'use client'
 
-import {CityImage} from '../models/CityImage'
+import React, {useMemo} from 'react'
+
+import {CountryImage} from '../models/CountryImage'
 
 import BirthdayGreeting from './birthday-greeting'
 import BirthdayHistorical from './birthday-historical'
@@ -10,8 +12,8 @@ interface BentoGridProps {
   content: string
   name: string
   birthday: string
-  city: string
-  cityImage: CityImage | undefined
+  country: string
+  countryImage: CountryImage | undefined
   isStreaming: boolean
 }
 
@@ -25,30 +27,38 @@ export default function BentoGrid({
   content,
   name,
   birthday,
-  city,
-  cityImage,
+  country,
+  countryImage,
   isStreaming
 }: BentoGridProps) {
-  if (!content) return null
   const phrase = content?.split('## ')
 
   const greetingSection = phrase[1]?.split('Frase: ')[1] || ''
   const historicalSection = phrase[2]?.split('Evento: ')[1] || ''
 
-  let offerSection: OffersList[] = []
+  const rawOffers = phrase[3]?.split('Ofertas de cumpleaños')[1] || ''
 
-  if (phrase[3]) {
-    const str = phrase[3].split('Ofertas de cumpleaños')
+  const parsedOffers = useMemo<OffersList[] | null>(() => {
+    if (!rawOffers) return null
+    const firstBracket = rawOffers.indexOf('[')
+    const lastBracket = rawOffers.lastIndexOf(']')
 
-    if (str[1]) {
-      try {
-        offerSection = JSON.parse(str[1])
-      } catch (e) {
-        offerSection = []
-        console.error('Error parsing offers:', e)
-      }
+    if (firstBracket === -1 || lastBracket === -1 || lastBracket <= firstBracket) return null
+
+    const candidate = rawOffers.slice(firstBracket, lastBracket + 1)
+
+    try {
+      const parsed = JSON.parse(candidate)
+
+      return Array.isArray(parsed) ? parsed : null
+    } catch (e) {
+      console.error(e)
+
+      return null
     }
-  }
+  }, [rawOffers])
+
+  if (!content) return null
 
   return (
     <>
@@ -60,10 +70,10 @@ export default function BentoGrid({
       />
       <BirthdayHistorical historical={historicalSection} isStreaming={isStreaming} />
       <BirthdayOffers
-        city={city}
-        cityImage={cityImage}
+        country={country}
+        countryImage={countryImage}
         isStreaming={isStreaming}
-        offers={offerSection}
+        offers={parsedOffers}
       />
     </>
   )
