@@ -1,0 +1,23 @@
+export const countries = [
+  {id: '', name: 'Selecciona el país'},
+  {id: '1', name: 'Argentina'},
+  {id: '2', name: 'Bolivia'},
+  {id: '3', name: 'Chile'},
+  {id: '4', name: 'Colombia'},
+  {id: '5', name: 'Costa Rica'},
+  {id: '6', name: 'Cuba'},
+  {id: '7', name: 'Ecuador'},
+  {id: '8', name: 'El Salvador'},
+  {id: '9', name: 'España'},
+  {id: '10', name: 'Guatemala'},
+  {id: '11', name: 'Honduras'},
+  {id: '12', name: 'México'},
+  {id: '13', name: 'Nicaragua'},
+  {id: '14', name: 'Panamá'},
+  {id: '15', name: 'Paraguay'},
+  {id: '16', name: 'Perú'},
+  {id: '17', name: 'Puerto Rico'},
+  {id: '18', name: 'República Dominicana'},
+  {id: '19', name: 'Uruguay'},
+  {id: '20', name: 'Venezuela'}
+]

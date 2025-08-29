@@ -6,13 +6,15 @@ import {AlertCircle, ArrowRight, Calendar, Loader2, MapPin, User} from 'lucide-r
 import {toast} from 'sonner'
 
 import {CityImage} from '../models/CityImage'
+import {countries} from '../lib/constants'
 
 import BentoGrid from './bento-grid'
 
 export default function BirthdayForm() {
-  const [birthdayInput, setBirthdayInput] = useState<string>('1993-08-02')
-  const [nameInput, setNameInput] = useState<string>('Damian')
-  const [cityInput, setCityInput] = useState<string>('Santiago')
+  const [birthdayInput, setBirthdayInput] = useState<string>('')
+  const [nameInput, setNameInput] = useState<string>('')
+  const [selectedCountry, setSelectedCountry] = useState('')
+  const [countrySelect, setCountrySelect] = useState('')
   const [cityImage, setCityImage] = useState<CityImage | undefined>()
 
   const {completion, setCompletion, complete, isLoading, error, stop} = useCompletion({
@@ -34,13 +36,13 @@ export default function BirthdayForm() {
         body: {
           name: nameInput,
           birthday: birthdayInput,
-          city: cityInput
+          city: countrySelect
         }
       })
       const resp = await fetch('/api/photo', {
         method: 'POST',
         headers: {'Content-Type': 'application/json'},
-        body: JSON.stringify({query: cityInput})
+        body: JSON.stringify({query: countrySelect})
       })
       const data = await resp.json()
 
@@ -48,6 +50,14 @@ export default function BirthdayForm() {
     } catch (error) {
       console.error('Error in complete: ', error)
     }
+  }
+
+  const handleCountryChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const countryId = e.target.value
+    const countryName = countries.find((country) => country.id === countryId)?.name || ''
+
+    setSelectedCountry(countryId)
+    setCountrySelect(countryName)
   }
 
   return (
@@ -70,13 +80,13 @@ export default function BirthdayForm() {
               <div className="flex h-5 w-5 items-center justify-center rounded-full bg-blue-100">
                 <User className="h-3 w-3 text-blue-600" />
               </div>
-              Tú nombre
+              Nombre
             </label>
             <input
               className="h-12 w-full rounded-xl border border-gray-200 px-4 text-gray-900 transition-colors placeholder:text-gray-400 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20"
               disabled={isLoading}
               id="nameID"
-              placeholder="Escribe tu nombre"
+              placeholder="Escribe el nombre de la persona a felicitar"
               type="text"
               value={nameInput}
               onChange={(e) => setNameInput(e.target.value)}
@@ -90,7 +100,7 @@ export default function BirthdayForm() {
               <div className="flex h-5 w-5 items-center justify-center rounded-full bg-purple-100">
                 <Calendar className="h-3 w-3 text-purple-600" />
               </div>
-              Tú Día de Cumpleaños
+              Fecha de Cumpleaños
             </label>
             <input
               className="h-12 w-full rounded-xl border border-gray-200 px-4 text-gray-900 transition-colors focus:border-purple-500 focus:outline-none focus:ring-2 focus:ring-purple-500/20"
@@ -105,22 +115,26 @@ export default function BirthdayForm() {
           <div className="space-y-2">
             <label
               className="flex items-center gap-2 text-sm font-medium text-gray-700"
-              htmlFor="cityID"
+              htmlFor="countryID"
             >
               <div className="flex h-5 w-5 items-center justify-center rounded-full bg-green-100">
                 <MapPin className="h-3 w-3 text-green-600" />
               </div>
-              Tú Ciudad
+              Pais
             </label>
-            <input
+            <select
               className="h-12 w-full rounded-xl border border-gray-200 px-4 text-gray-900 transition-colors focus:border-green-500 focus:outline-none focus:ring-2 focus:ring-green-500/20"
               disabled={isLoading}
-              id="cityID"
-              placeholder="Escribe tu ciudad"
-              type="text"
-              value={cityInput}
-              onChange={(e) => setCityInput(e.target.value)}
-            />
+              id="countryID"
+              value={selectedCountry}
+              onChange={handleCountryChange}
+            >
+              {countries.map(({id, name}) => (
+                <option key={id} value={id}>
+                  {name}
+                </option>
+              ))}
+            </select>
           </div>
           <div className="flex gap-3">
             <button
@@ -160,7 +174,7 @@ export default function BirthdayForm() {
         <section className="grid auto-rows-min grid-cols-1 gap-4 md:grid-cols-4 lg:grid-cols-6">
           <BentoGrid
             birthday={birthdayInput}
-            city={cityInput}
+            city={selectedCountry}
             cityImage={cityImage}
             content={completion}
             isStreaming={isLoading}
