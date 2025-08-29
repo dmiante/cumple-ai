@@ -2,7 +2,7 @@
 
 import {Calendar, PartyPopper, Sparkles} from 'lucide-react'
 
-import {CopyButton} from './CopyButton'
+import {CopyButton} from './copy-button'
 
 interface BirthdayGreetingProps {
   greeting: string
