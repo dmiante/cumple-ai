@@ -17,6 +17,11 @@ export default function BirthdayForm() {
   const [countryName, setCountryName] = useState('')
   const [countryImage, setCountryImage] = useState<CountryImage | undefined>()
 
+  const [submittedName, setSubmittedName] = useState<string>('')
+  const [submittedBirthday, setSubmittedBirthday] = useState<string>('')
+  const [submittedCountryName, setSubmittedCountryName] = useState<string>('')
+  const [submittedCountryImage, setSubmittedCountryImage] = useState<CountryImage | undefined>()
+
   const {completion, setCompletion, complete, isLoading, error, stop} = useCompletion({
     api: '/api/facts',
     onFinish: () => {
@@ -31,6 +36,10 @@ export default function BirthdayForm() {
   async function handleSubmitForm(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault()
     setCompletion('')
+    setSubmittedName(nameInput)
+    setSubmittedBirthday(birthdayInput)
+    setSubmittedCountryName(countryName)
+
     try {
       await complete('', {
         body: {
@@ -47,6 +56,7 @@ export default function BirthdayForm() {
       const data = await resp.json()
 
       setCountryImage(data)
+      setSubmittedCountryImage(data)
     } catch (error) {
       console.error('Error in complete: ', error)
     }
@@ -173,12 +183,12 @@ export default function BirthdayForm() {
       {(completion || isLoading) && (
         <section className="grid auto-rows-min grid-cols-1 gap-4 md:grid-cols-4 lg:grid-cols-6">
           <BentoGrid
-            birthday={birthdayInput}
+            birthday={submittedBirthday}
             content={completion}
-            country={countryName}
-            countryImage={countryImage}
+            country={submittedCountryName}
+            countryImage={submittedCountryImage || countryImage}
             isStreaming={isLoading}
-            name={nameInput}
+            name={submittedName}
           />
         </section>
       )}
