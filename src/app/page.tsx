@@ -12,7 +12,7 @@ export default function Home() {
           <h1 className="mb-8 text-7xl font-extrabold text-gray-900">
             Cumple<span className="text-pink-700">AI</span>
           </h1>
-          <p className="text-pretty text-base text-gray-600">
+          <p className="text-balance text-base text-gray-600">
             Comparte un mensaje de cumpleaños, descubre que hecho historico que ocurrió ese día, y
             revisa que tiendas tienen regalos o eventos gratis para tí.
           </p>
@@ -24,7 +24,18 @@ export default function Home() {
         <Toaster richColors position="bottom-center" />
         <footer className="mt-12 text-center">
           <div className="flex items-center justify-center gap-1 text-xs text-gray-500">
-            <p>Built by Dmiante 🦁</p>
+            <p>
+              Built by{' '}
+              <a
+                className="hover:text-black hover:underline"
+                href="https://github.com/dmiante"
+                rel="noreferrer"
+                target="_blank"
+              >
+                Dmiante
+              </a>{' '}
+              🦁
+            </p>
           </div>
         </footer>
       </div>
