@@ -1,36 +1,80 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
-## Getting Started
+# 🎉 cumple-ai
 
-First, run the development server:
+Aplicación web hecha con **Next.js** que genera felicitaciones personalizadas de cumpleaños, eventos históricos que pasaron ese dia y ofertas o actividades gratis de tiendas en tu pais.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+
+## ✨ Características
+
+- 🎂 **Saludo personalizado**: genera una frase de cumpleaños.  
+- 📜 **Eventos históricos**: muestra hechos que ocurrieron el mismo día del cumpleaños del usuario.  
+- 🎁 **Ofertas especiales**: lista promociones ficticias para complementar la experiencia.  
+- ⚡ **Streaming con AI SDK de Vercel**: la respuesta llega en tiempo real.  
+- 🌐 **Integración con APIs externas** (ej. Numbers API para eventos históricos).  
+- 🎨 **UI con TailwindCSS** y tipografía **Geist** para un diseño limpio.  
+- 🖥️ **Despliegue en Vercel** sin configuración extra.  
+
+## 💻 Tecnologías Utilizadas
+
+- [**Next.js 15**](https://nextjs.org/) con App Router
+- [**Vercel AI SDK**](https://ai-sdk.dev/) para manejo de IA con streaming
+- [**Tailwind CSS**](https://tailwindcss.com/) para estilos
+- [**Geist Font Family**](https://vercel.com/font) fuente optimizada con next/font
+- [**Numbers API**](http://numbersapi.com/) api para recuperar hechos historicos
+- [**Sonner**](https://sonner.emilkowal.ski/) para notificaciones dentro de la web
+- [**Lucide.dev**](https://lucide.dev/) para iconos
+- [**zod**](https://zod.dev/) validacion de esquemas
+- [**Google Gemini API**](https://ai.google.dev/) api de inteligencia artificial
+- [**unsplash**](https://unsplash.com/developers) api para imagenes open source
+- [**Vercel**](https://vercel.com/) despliege y alojamiento
+
+
+## 🛠️ Instalación
+
+### Prerrequisitos
+
+- Node.js 22 o superior
+- npm o pnpm
+
+### Configuración del proyecto
+
+1. **Clona el repositorio**
+   ```bash
+   git clone https://github.com/dmiante/cumple-ai.git
+   cd cumple-ai
+   ```
+
+2. **Instala las dependencias**
+   ```bash
+   npm install
+   # o
+   pnpm install
+   ```
+
+3. **Configura las variables de entorno**
+   ```bash
+   cp .env.example .env.local
+   ```
+   Edita `.env.local` y agrega tus claves de API necesarias.
+
+4. **Ejecuta el servidor de desarrollo**
+   ```bash
+   npm run dev
+   # o
+   pnpm dev
+   ```
+
+5. **Abre la aplicación**
+   Navega a [http://localhost:3000](http://localhost:3000) en tu navegador.
+## 🔑 Variables de entorno
+
+Crea un archivo `.env.local` con las siguientes variables:
+
+```env
+GOOGLE_GENERATIVE_AI_API_KEY=tu_clave_google_gemini
+
+API_UNSPLASH=tu_clave_unsplash
 ```
+## ☁️ Despliegue en Vercel
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
-
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
-
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Deplegado en [Vercel](https://vercel.com/)
