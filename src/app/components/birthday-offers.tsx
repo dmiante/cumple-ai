@@ -2,28 +2,15 @@
 
 import {Gift, MapPin, Tag} from 'lucide-react'
 
-import {CountryImage} from '../models/CountryImage'
-
-type Offer = {
-  name: string
-  offer?: string
-  requirements?: string
-}
-
-interface BirthdayOffersProps {
-  offers?: Offer[] | null
-  country: string
-  countryImage: CountryImage | undefined
-  isStreaming: boolean
-}
+import {BirthdayOfferCollection} from '../lib/types'
 
 export default function BirthdayOffers({
-  offers = [],
+  offers,
   country,
   countryImage,
-  isStreaming
-}: BirthdayOffersProps) {
-  return !isStreaming ? (
+  isLoading
+}: BirthdayOfferCollection) {
+  return !isLoading ? (
     <>
       <article className="group relative block h-96 overflow-hidden rounded-3xl border border-gray-100 bg-white shadow-sm md:col-span-4 lg:col-span-3">
         <img
@@ -65,9 +52,10 @@ export default function BirthdayOffers({
               </div>
             </div>
           </div>
+          {/* <div>{offers}</div> */}
           <ul className="max-h-auto grid gap-4 overflow-y-auto">
             {offers && offers.length > 0 ? (
-              offers.map(({name, offer, requirements}) => (
+              offers.map(({name, description, requirements}) => (
                 <li
                   key={name}
                   className="flex flex-col gap-4 rounded-2xl border border-white/20 bg-white/15 p-8 text-white backdrop-blur-sm"
@@ -77,7 +65,7 @@ export default function BirthdayOffers({
                       <h3 className="mb-2 text-balance font-mono text-4xl font-bold underline decoration-green-400 decoration-wavy">
                         {name}
                       </h3>
-                      <p className="text-balance text-lg">{offer}</p>
+                      <p className="text-balance text-lg">{description}</p>
                     </div>
                     <div className="h-px w-full bg-gradient-to-r from-transparent via-white/70 to-transparent lg:h-full lg:w-px lg:flex-none lg:bg-gradient-to-b" />
                     <div className="flex flex-col gap-2 text-center lg:mx-auto lg:p-4">

@@ -2,25 +2,12 @@
 
 import {Calendar, PartyPopper, Sparkles} from 'lucide-react'
 
+import {BirthdayMessage} from '../lib/types'
+
 import {CopyButton} from './copy-button'
 
-interface BirthdayGreetingProps {
-  greeting: string
-  name: string
-  birthday: string
-  isStreaming: boolean
-}
-
-function BirthdayGreeting({greeting, name, birthday, isStreaming}: BirthdayGreetingProps) {
-  const formatDate = (birthday: string) => {
-    if (!birthday) return null
-
-    const date = new Date(birthday)
-
-    return date.toLocaleDateString('es-CL', {timeZone: 'UTC', dateStyle: 'long'})
-  }
-
-  return !isStreaming ? (
+function BirthdayGreeting({message, birthDate, name, isLoading}: BirthdayMessage) {
+  return !isLoading ? (
     <>
       <article className="overflow-hidden rounded-3xl bg-gradient-to-br from-pink-500 via-rose-500 to-orange-500 p-6 text-white shadow-lg md:col-span-4 lg:col-span-4">
         <div className="flex flex-col gap-4">
@@ -35,10 +22,10 @@ function BirthdayGreeting({greeting, name, birthday, isStreaming}: BirthdayGreet
           </div>
           <div className="rounded-2xl bg-white/10 p-4 backdrop-blur-sm">
             <div className="max-w-none text-white">
-              <p className="leading-relaxed">{greeting}</p>
+              <p className="leading-relaxed">{message}</p>
             </div>
           </div>
-          <CopyButton text={greeting} />
+          <CopyButton text={message} />
         </div>
       </article>
       <article className="flex rounded-3xl bg-gradient-to-br from-purple-500 to-indigo-600 p-6 text-white shadow-lg md:col-span-4 lg:col-span-2">
@@ -48,7 +35,7 @@ function BirthdayGreeting({greeting, name, birthday, isStreaming}: BirthdayGreet
             <Calendar className="h-6 w-6" />
           </div>
           <div className="flex flex-col">
-            <h2 className="text-2xl font-bold lg:text-5xl">{formatDate(birthday)}</h2>
+            <h2 className="text-2xl font-bold lg:text-5xl">{birthDate}</h2>
             <div className="flex items-center gap-2 text-sm text-purple-100 lg:mt-4">
               <Sparkles className="h-4 w-4" />
               <span>Tú Día Especial!</span>

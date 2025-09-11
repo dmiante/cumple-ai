@@ -2,13 +2,10 @@
 
 import {Clock} from 'lucide-react'
 
-interface BirthdayHistoricalProps {
-  historical: string
-  isStreaming: boolean
-}
+import {BirthdayHistoricalEvent} from '../lib/types'
 
-export default function BirthdayHistorical({historical, isStreaming}: BirthdayHistoricalProps) {
-  return !isStreaming ? (
+export default function BirthdayHistorical({historical, isLoading}: BirthdayHistoricalEvent) {
+  return !isLoading ? (
     <article className="relative overflow-hidden rounded-3xl border border-gray-100 bg-white p-6 shadow-sm md:col-span-4 lg:col-span-3">
       <div>
         <div className="mb-4 flex items-center gap-3">
