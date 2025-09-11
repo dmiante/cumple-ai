@@ -13,7 +13,7 @@ export async function POST(req: NextRequest) {
     const data = await resp.json()
     const photos = data.results[0]
 
-    return NextResponse.json(photos)
+    return NextResponse.json({photos})
   } catch (error) {
     console.error(error)
 
