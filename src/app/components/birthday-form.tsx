@@ -1,74 +1,31 @@
 'use client'
 
-import {useState} from 'react'
-import {useCompletion} from '@ai-sdk/react'
 import {AlertCircle, ArrowRight, Calendar, Loader2, MapPin, User} from 'lucide-react'
-import {toast} from 'sonner'
 
+import {useBirthday} from '../hooks/use-birthdays'
 import {countries} from '../lib/constants'
-import {CountryImage} from '../models/CountryImage'
 
 import BentoGrid from './bento-grid'
 
 export default function BirthdayForm() {
-  const [birthdayInput, setBirthdayInput] = useState<string>('')
-  const [nameInput, setNameInput] = useState<string>('')
-  const [selectedCountry, setSelectedCountry] = useState('')
-  const [countryName, setCountryName] = useState('')
-  const [countryImage, setCountryImage] = useState<CountryImage | undefined>()
-
-  const [submittedName, setSubmittedName] = useState<string>('')
-  const [submittedBirthday, setSubmittedBirthday] = useState<string>('')
-  const [submittedCountryName, setSubmittedCountryName] = useState<string>('')
-  const [submittedCountryImage, setSubmittedCountryImage] = useState<CountryImage | undefined>()
-
-  const {completion, setCompletion, complete, isLoading, error, stop} = useCompletion({
-    api: '/api/facts',
-    onFinish: () => {
-      toast.success('Completion finished')
-    },
-    onError: (error: Error) => {
-      toast.error('Completion error')
-      console.error('Completion error: ', error.message)
-    }
-  })
-
-  async function handleSubmitForm(event: React.FormEvent<HTMLFormElement>) {
-    event.preventDefault()
-    setCompletion('')
-    setSubmittedName(nameInput)
-    setSubmittedBirthday(birthdayInput)
-    setSubmittedCountryName(countryName)
-
-    try {
-      await complete('', {
-        body: {
-          name: nameInput,
-          birthday: birthdayInput,
-          country: countryName
-        }
-      })
-      const resp = await fetch('/api/photo', {
-        method: 'POST',
-        headers: {'Content-Type': 'application/json'},
-        body: JSON.stringify({query: countryName})
-      })
-      const data = await resp.json()
-
-      setCountryImage(data)
-      setSubmittedCountryImage(data)
-    } catch (error) {
-      console.error('Error in complete: ', error)
-    }
-  }
-
-  const handleCountryChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    const countryId = e.target.value
-    const countryName = countries.find((country) => country.id === countryId)?.name || ''
-
-    setSelectedCountry(countryId)
-    setCountryName(countryName)
-  }
+  const {
+    nameInput,
+    birthdayInput,
+    selectedCountry,
+    countryName,
+    countryImage,
+    birthDate,
+    name,
+    greetingText,
+    historicalText,
+    offersText,
+    isLoading,
+    onError: error,
+    handleInputNameChange,
+    handleInputBirthdayChange,
+    handleCountryChange,
+    handleSubmitForm
+  } = useBirthday()
 
   return (
     <>
@@ -99,7 +56,7 @@ export default function BirthdayForm() {
               placeholder="Escribe el nombre"
               type="text"
               value={nameInput}
-              onChange={(e) => setNameInput(e.target.value)}
+              onChange={handleInputNameChange}
             />
           </div>
           <div className="space-y-2">
@@ -119,7 +76,7 @@ export default function BirthdayForm() {
               id="birthID"
               type="date"
               value={birthdayInput}
-              onChange={(e) => setBirthdayInput(e.target.value)}
+              onChange={handleInputBirthdayChange}
             />
           </div>
           <div className="space-y-2">
@@ -179,16 +136,17 @@ export default function BirthdayForm() {
           </div>
         </form>
       </section>
-      {/* Response */}
-      {(completion || isLoading) && (
+      {(greetingText || isLoading) && (
         <section className="grid auto-rows-min grid-cols-1 gap-4 md:grid-cols-4 lg:grid-cols-6">
           <BentoGrid
-            birthday={submittedBirthday}
-            content={completion}
-            country={submittedCountryName}
-            countryImage={submittedCountryImage || countryImage}
-            isStreaming={isLoading}
-            name={submittedName}
+            birthDate={birthDate}
+            country={countryName}
+            countryImage={countryImage}
+            historical={historicalText}
+            isLoading={isLoading}
+            message={greetingText}
+            name={name}
+            offers={offersText}
           />
         </section>
       )}
