@@ -11,7 +11,7 @@ export async function POST(req: NextRequest) {
     const prompt: string = BIRTHDAY_PROMPTS.OFFERS(country)
 
     const {text} = await generateText({
-      model: google('gemini-2.5-pro'),
+      model: google('gemini-2.5-flash'),
       prompt,
       temperature: 0.7,
       tools: {
