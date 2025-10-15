@@ -22,3 +22,18 @@ export const countries = [
   {id: 'UY', name: 'Uruguay'},
   {id: 'VE', name: 'Venezuela'}
 ]
+
+export const months = [
+  'enero',
+  'febrero',
+  'marzo',
+  'abril',
+  'mayo',
+  'junio',
+  'julio',
+  'agosto',
+  'septiembre',
+  'octubre',
+  'noviembre',
+  'diciembre'
+]
