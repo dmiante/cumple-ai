@@ -3,7 +3,7 @@ import {toast} from 'sonner'
 
 import {CountryImage} from '../models/CountryImage'
 import {countries} from '../lib/constants'
-import {Offer} from '../lib/types'
+import {HistoricalEvent, Offer} from '../lib/types'
 
 export function useBirthday() {
   const [nameInput, setNameInput] = useState<string>('')
@@ -14,7 +14,7 @@ export function useBirthday() {
   const [isLoading, setIsLoading] = useState<boolean>(false)
   const [onError, setOnError] = useState<Error | null>(null)
   const [greetingText, setGreetingText] = useState<string>('')
-  const [historicalText, setHistoricalText] = useState<string>('')
+  const [historicalText, setHistoricalText] = useState<HistoricalEvent[]>([{text: '', link: ''}])
   const [offersText, setOffersText] = useState<Offer[]>([
     {name: '', description: '', requirements: ''}
   ])
@@ -61,9 +61,17 @@ export function useBirthday() {
         body: JSON.stringify({month, day})
       })
 
-      const data = await resp.json()
+      const {text} = await resp.json()
 
-      setHistoricalText(data.text)
+      const firstBracket = text.indexOf('[')
+      const lastBracket = text.lastIndexOf(']')
+
+      if (firstBracket === -1 || lastBracket === -1 || lastBracket <= firstBracket) return null
+
+      const candidate = text.slice(firstBracket, lastBracket + 1)
+      const parsed = JSON.parse(candidate)
+
+      setHistoricalText(parsed)
     } catch (error) {
       toast.error('Error generating historical event')
       setOnError(

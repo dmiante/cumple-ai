@@ -7,21 +7,26 @@ export interface BirthdayMessage {
   isLoading: boolean
 }
 
+export interface Offer {
+  name: string
+  description: string
+  requirements: string
+}
+
+export interface HistoricalEvent {
+  text: string
+  link: string
+}
+
 export interface BirthdayBentoGrid {
   message: string
-  historical: string
+  historical: HistoricalEvent[]
   offers: Offer[]
   name: string
   birthDate: string
   country: string
   countryImage: CountryImage | null
   isLoading: boolean
-}
-
-export interface Offer {
-  name: string
-  description: string
-  requirements: string
 }
 
 export interface BirthdayOfferCollection {
@@ -32,6 +37,6 @@ export interface BirthdayOfferCollection {
 }
 
 export interface BirthdayHistoricalEvent {
-  historical: string
+  historical: HistoricalEvent[]
   isLoading: boolean
 }
