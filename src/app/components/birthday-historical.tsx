@@ -1,13 +1,13 @@
 'use client'
 
-import {Clock} from 'lucide-react'
+import {Clock, ExternalLink} from 'lucide-react'
 
 import {BirthdayHistoricalEvent} from '../lib/types'
 
 export default function BirthdayHistorical({historical, isLoading}: BirthdayHistoricalEvent) {
   return !isLoading ? (
-    <article className="relative overflow-hidden rounded-3xl border border-gray-100 bg-white p-6 shadow-sm md:col-span-4 lg:col-span-3">
-      <div>
+    <article className="group relative transform overflow-hidden rounded-3xl border border-gray-100 bg-white p-6 shadow-sm duration-500 hover:-translate-y-2 hover:shadow-2xl md:col-span-4 lg:col-span-3">
+      <div className="flex h-full flex-col">
         <div className="mb-4 flex items-center gap-3">
           <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-blue-100">
             <Clock className="h-6 w-6 text-blue-600" />
@@ -18,13 +18,28 @@ export default function BirthdayHistorical({historical, isLoading}: BirthdayHist
           </div>
         </div>
 
-        <div className="max-h-44 overflow-y-auto rounded-2xl bg-blue-50 p-4">
-          {historical ? (
-            <p className="max-w-none text-gray-700">{historical}</p>
-          ) : (
-            <p className="text-gray-700">No se encontraron eventos</p>
-          )}
-        </div>
+        {historical && historical.length > 0 ? (
+          historical.map(({text, link}) => (
+            <div key={link} className="flex h-full flex-col justify-between gap-4">
+              <div className="max-h-44 overflow-y-auto rounded-2xl bg-gray-50 p-4 transition-all duration-300 group-hover:bg-indigo-50">
+                <p className="text-wrap font-serif text-lg leading-relaxed">{text}</p>
+              </div>
+              <a
+                className="flex items-center justify-between gap-3 rounded-2xl bg-indigo-600 px-4 py-3 font-semibold text-white transition-all duration-300 hover:bg-indigo-700"
+                href={link}
+                rel="noopener noreferrer"
+                target="_blank"
+              >
+                Leer más
+                <ExternalLink className="h-5 w-5" />
+              </a>
+            </div>
+          ))
+        ) : (
+          <div className="flex rounded-2xl bg-blue-50 p-4">
+            <p className="text-gray-600">No se encontraron eventos relacionados con la fecha.</p>
+          </div>
+        )}
       </div>
     </article>
   ) : (
