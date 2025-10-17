@@ -12,7 +12,7 @@ export default function BirthdayOffers({
 }: BirthdayOfferCollection) {
   return !isLoading ? (
     <>
-      <article className="group relative block h-96 overflow-hidden rounded-3xl border border-gray-100 bg-white shadow-sm md:col-span-4 lg:col-span-3">
+      <article className="group relative block h-96 transform overflow-hidden rounded-3xl border border-gray-100 bg-white shadow-lg duration-300 hover:-translate-y-2 md:col-span-4 lg:col-span-3">
         <img
           alt={countryImage?.alt_description}
           className="absolute inset-0 h-full w-full object-cover"
@@ -29,7 +29,7 @@ export default function BirthdayOffers({
           </div>
         </div>
       </article>
-      <article className="rounded-3xl border border-gray-100 bg-gradient-to-br from-emerald-500 to-teal-600 p-6 shadow-sm md:col-span-4 lg:col-span-full">
+      <article className="transform rounded-3xl border border-gray-100 bg-gradient-to-br from-emerald-500 to-teal-600 p-6 shadow-lg duration-300 hover:-translate-y-2 md:col-span-4 lg:col-span-full">
         <div>
           <div className="lg:mb-4 lg:flex lg:items-center lg:justify-between">
             <div className="flex items-start gap-4">
@@ -58,20 +58,18 @@ export default function BirthdayOffers({
               offers.map(({name, description, requirements}) => (
                 <li
                   key={name}
-                  className="flex flex-col gap-4 rounded-2xl border border-white/20 bg-white/15 p-8 text-white backdrop-blur-sm"
+                  className="flex flex-col gap-4 rounded-2xl border border-white/20 bg-white/15 p-8 text-white backdrop-blur-sm hover:bg-white/30"
                 >
-                  <div className="flex flex-col gap-8 lg:flex-row lg:gap-2">
+                  <div className="grid gap-4 lg:grid-cols-[40%,auto,1fr]">
                     <div className="flex w-full flex-col items-center justify-center gap-2 text-center lg:max-w-72 lg:items-start lg:text-start">
-                      <h3 className="mb-2 text-balance font-mono text-4xl font-bold underline decoration-green-400 decoration-wavy">
+                      <h3 className="relative mb-2 text-balance font-mono text-4xl font-bold after:absolute after:bottom-0 after:left-0 after:h-1 after:w-0 after:bg-green-400 after:transition-all after:duration-300 hover:after:w-full">
                         {name}
                       </h3>
                       <p className="text-balance text-lg">{description}</p>
                     </div>
                     <div className="h-px w-full bg-gradient-to-r from-transparent via-white/70 to-transparent lg:h-full lg:w-px lg:flex-none lg:bg-gradient-to-b" />
-                    <div className="flex flex-col gap-2 text-center lg:mx-auto lg:p-4">
-                      <h3 className="font-mono text-xl font-bold underline decoration-pink-700 decoration-wavy decoration-2 underline-offset-4">
-                        ¿Como lo canjeas?
-                      </h3>
+                    <div className="flex flex-col gap-4 text-center lg:mx-auto lg:p-4 lg:text-start">
+                      <h3 className="font-mono text-xl font-bold">¿Como lo canjeas?</h3>
                       <p className="text-pretty font-light leading-relaxed">{requirements}</p>
                     </div>
                   </div>
