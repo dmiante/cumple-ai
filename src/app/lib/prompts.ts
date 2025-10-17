@@ -27,18 +27,39 @@ export const BIRTHDAY_PROMPTS = {
     [{"text":"[descripción con año]","link":"[URL de Wikipedia]"}]
     `,
   OFFERS: (country: string) =>
-    `Busca en internet más de 3 lugares o tiendas que suelen ofrecer artículos, comidas o experiencias gratis a personas en su cumpleaños en ${country}.
-    Simplemente responde con lo que encontraste.
-    Para cada oferta, rellena el siguiente objeto y agrégalos a un array:
+    `Busca en internet AL MENOS 5 lugares, tiendas, restaurantes o empresas que actualmente ofrecen artículos, comidas o experiencias GRATIS o con descuento significativo a personas en su cumpleaños en ${country}.
 
-    {
-      "name": "[Aquí va el nombre de la tienda o lugar]",
-      "offer": "[Aquí va lo que incluye la oferta]",
-      "requirements": "[Aquí van los requisitos y cómo solicitarla]"
-    }
+    CRITERIOS DE BÚSQUEDA:
+    1. Prioriza ofertas verificables y activas en ${new Date().getFullYear()}
+    2. Incluye variedad: restaurantes, cafeterías, tiendas de retail, entretenimiento, belleza
+    3. Enfócate en marcas conocidas o cadenas establecidas con presencia en ${country}
+    4. Verifica que las ofertas sean actuales (descarta promociones antiguas o descontinuadas)
+    5. Busca en sitios web oficiales, blogs de ofertas locales y páginas de cupones de ${country}
 
-    Responde únicamente con el array en formato JSON válido. 
-    No envuelvas el resultado en comillas, no lo devuelvas como string, no incluyas texto adicional ni backticks.
-    El resultado debe comenzar con '[' y terminar con ']'.
+    INFORMACIÓN REQUERIDA PARA CADA OFERTA:
+    - "name": Nombre oficial completo del establecimiento o marca
+    - "description": Descripción específica y clara de lo que se ofrece (ej: "Postre gratis", "20% descuento en compra", "Entrada gratuita")
+    - "requirements": Requisitos COMPLETOS y ESPECÍFICOS:
+      * ¿Necesita registrarse previamente? ¿Dónde y cuándo?
+      * ¿Debe presentar identificación?
+      * ¿Es válido el día exacto o durante el mes del cumpleaños?
+      * ¿Necesita descargar una app o unirse a un programa de lealtad?
+      * ¿Hay compra mínima requerida?
+      * ¿Aplica solo para ciertos productos o servicios?
+    - "link": URL completa y válida donde se puede:
+      * Registrarse para reclamar la oferta, O
+      * Ver los detalles oficiales de la promoción, O
+      * Sitio web principal de la empresa (si no hay página específica de la oferta)
+      * Prioriza links oficiales del establecimiento sobre blogs o sitios de terceros
+
+    FORMATO DE RESPUESTA:
+    Devuelve ÚNICAMENTE un array JSON válido con mínimo 5 objetos.
+    Sin texto adicional, sin backticks, sin explicaciones, sin comillas envolventes.
+
+    FORMATO EXACTO:
+    [{"name":"[Nombre completo]","description":"[Descripción específica]","requirements":"[Requisitos detallados paso a paso]","link":"[URL completa]"}]
+
+    EJEMPLO DE CALIDAD ESPERADA:
+    [{"name":"Starbucks","description":"Bebida gratis de cualquier tamaño","requirements":"Debes registrarte en Starbucks Rewards al menos 3 días antes de tu cumpleaños. La oferta es válida durante todo el mes de tu cumpleaños y se activa automáticamente en tu cuenta.","link":"https://rewards.starbucks.cl/loyalty"}]
     `
 }
