@@ -9,7 +9,7 @@ import {CopyButton} from './copy-button'
 function BirthdayGreeting({message, birthDate, name, isLoading}: BirthdayMessage) {
   return !isLoading ? (
     <>
-      <article className="overflow-hidden rounded-3xl bg-gradient-to-br from-pink-500 via-rose-500 to-orange-500 p-6 text-white shadow-lg md:col-span-4 lg:col-span-4">
+      <article className="group transform overflow-hidden rounded-3xl bg-gradient-to-br from-pink-500 via-rose-500 to-orange-500 p-6 text-white shadow-lg duration-300 hover:-translate-y-2 hover:shadow-2xl md:col-span-4 lg:col-span-4">
         <div className="flex flex-col gap-4">
           <div className="flex items-center gap-3">
             <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-white/20 backdrop-blur-sm">
@@ -20,15 +20,15 @@ function BirthdayGreeting({message, birthDate, name, isLoading}: BirthdayMessage
               <span className="font-bold"> {name}!</span>
             </h2>
           </div>
-          <div className="rounded-2xl bg-white/10 p-4 backdrop-blur-sm">
-            <div className="max-w-none text-white">
+          <div className="rounded-2xl bg-white/10 p-4 backdrop-blur-sm transition-all duration-300 group-hover:bg-white/80">
+            <div className="max-w-none text-white group-hover:text-black">
               <p className="leading-relaxed">{message}</p>
             </div>
           </div>
           <CopyButton text={message} />
         </div>
       </article>
-      <article className="flex rounded-3xl bg-gradient-to-br from-purple-500 to-indigo-600 p-6 text-white shadow-lg md:col-span-4 lg:col-span-2">
+      <article className="flex rounded-3xl bg-gradient-to-br from-purple-500 to-indigo-600 p-6 text-white shadow-lg duration-300 hover:-translate-y-2 hover:shadow-2xl md:col-span-4 lg:col-span-2">
         <div className="flex gap-4 lg:flex-col lg:gap-4">
           {/* <div className="flex lg:flex-col lg:justify-between"> */}
           <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-white/20 backdrop-blur-sm">

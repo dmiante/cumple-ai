@@ -6,7 +6,7 @@ import {BirthdayHistoricalEvent} from '../lib/types'
 
 export default function BirthdayHistorical({historical, isLoading}: BirthdayHistoricalEvent) {
   return !isLoading ? (
-    <article className="group relative transform overflow-hidden rounded-3xl border border-gray-100 bg-white p-6 shadow-sm duration-500 hover:-translate-y-2 hover:shadow-2xl md:col-span-4 lg:col-span-3">
+    <article className="group relative transform overflow-hidden rounded-3xl border border-gray-100 bg-white p-6 shadow-lg duration-500 hover:-translate-y-2 hover:shadow-2xl md:col-span-4 lg:col-span-3">
       <div className="flex h-full flex-col">
         <div className="mb-4 flex items-center gap-3">
           <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-blue-100">
