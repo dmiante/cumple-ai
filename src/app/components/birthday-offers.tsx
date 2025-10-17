@@ -46,7 +46,7 @@ export default function BirthdayOffers({
               </div>
             </div>
             <div className="my-4 flex justify-center">
-              <div className="flex w-fit items-center gap-2 rounded-full bg-white px-4 py-2 text-base font-bold text-emerald-600 shadow-sm lg:text-sm">
+              <div className="flex w-fit items-center gap-2 rounded-full bg-white px-4 py-2 text-base font-bold text-emerald-600 shadow-sm hover:bg-amber-100 lg:text-sm">
                 <Tag className="h-4 w-4" />
                 {offers?.length} Ofertas GRATIS!
               </div>
@@ -55,24 +55,30 @@ export default function BirthdayOffers({
           {/* <div>{offers}</div> */}
           <ul className="max-h-auto grid gap-4 overflow-y-auto">
             {offers && offers.length > 0 ? (
-              offers.map(({name, description, requirements}) => (
-                <li
-                  key={name}
-                  className="flex flex-col gap-4 rounded-2xl border border-white/20 bg-white/15 p-8 text-white backdrop-blur-sm hover:bg-white/30"
-                >
-                  <div className="grid gap-4 lg:grid-cols-[40%,auto,1fr]">
-                    <div className="flex w-full flex-col items-center justify-center gap-2 text-center lg:max-w-72 lg:items-start lg:text-start">
-                      <h3 className="relative mb-2 text-balance font-mono text-4xl font-bold after:absolute after:bottom-0 after:left-0 after:h-1 after:w-0 after:bg-green-400 after:transition-all after:duration-300 hover:after:w-full">
-                        {name}
-                      </h3>
-                      <p className="text-balance text-lg">{description}</p>
+              offers.map(({name, description, requirements, link}) => (
+                <li key={name}>
+                  <a
+                    className="flex flex-col gap-4 rounded-2xl border border-white/20 bg-white/15 p-8 text-white backdrop-blur-sm hover:bg-white/20"
+                    href={link}
+                    rel="noopener noreferrer"
+                    target="_blank"
+                  >
+                    <div className="group grid gap-4 lg:grid-cols-[40%,auto,1fr]">
+                      <div className="flex w-full flex-col items-center justify-center gap-2 text-center lg:max-w-72 lg:items-start lg:text-start">
+                        <div className="relative mb-2 text-balance font-mono text-4xl font-bold after:absolute after:bottom-0 after:left-0 after:h-1 after:w-0 after:bg-amber-200 after:transition-all after:duration-300 hover:after:w-full group-hover:text-amber-200">
+                          {name}
+                        </div>
+                        <p className="text-balance text-lg">{description}</p>
+                      </div>
+                      <div className="h-px w-full bg-gradient-to-r from-transparent via-white/70 to-transparent lg:h-full lg:w-px lg:flex-none lg:bg-gradient-to-b" />
+                      <div className="flex flex-col gap-4 text-center lg:mx-auto lg:p-4 lg:text-start">
+                        <h3 className="font-mono text-xl font-bold group-hover:text-amber-200">
+                          ¿Como lo canjeas?
+                        </h3>
+                        <p className="text-pretty font-light leading-relaxed">{requirements}</p>
+                      </div>
                     </div>
-                    <div className="h-px w-full bg-gradient-to-r from-transparent via-white/70 to-transparent lg:h-full lg:w-px lg:flex-none lg:bg-gradient-to-b" />
-                    <div className="flex flex-col gap-4 text-center lg:mx-auto lg:p-4 lg:text-start">
-                      <h3 className="font-mono text-xl font-bold">¿Como lo canjeas?</h3>
-                      <p className="text-pretty font-light leading-relaxed">{requirements}</p>
-                    </div>
-                  </div>
+                  </a>
                 </li>
               ))
             ) : (
