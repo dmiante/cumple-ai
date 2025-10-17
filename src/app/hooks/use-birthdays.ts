@@ -16,7 +16,7 @@ export function useBirthday() {
   const [greetingText, setGreetingText] = useState<string>('')
   const [historicalText, setHistoricalText] = useState<HistoricalEvent[]>([{text: '', link: ''}])
   const [offersText, setOffersText] = useState<Offer[]>([
-    {name: '', description: '', requirements: ''}
+    {name: '', description: '', requirements: '', link: ''}
   ])
   const submittedRef = useRef({name: '', birthday: '', country: ''})
 

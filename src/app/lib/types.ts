@@ -11,6 +11,7 @@ export interface Offer {
   name: string
   description: string
   requirements: string
+  link: string
 }
 
 export interface HistoricalEvent {
