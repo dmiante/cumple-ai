@@ -13,10 +13,6 @@ export async function POST(req: NextRequest) {
     const {text} = await generateText({
       model: google('gemini-2.5-flash-lite'),
       prompt,
-      // system: `
-      //     Eres un asistente útil que proporciona información personalizada de cumpleaños.
-      //     Responde sin introduccion y solo lo que se pregunto.
-      //     `,
       temperature: 0.7
     })
 
