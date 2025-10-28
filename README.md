@@ -10,7 +10,7 @@ Aplicación web hecha con **Next.js** que genera felicitaciones personalizadas d
 - 📜 **Eventos históricos**: muestra hechos que ocurrieron el mismo día del cumpleaños del usuario.  
 - 🎁 **Ofertas especiales**: lista promociones ficticias para complementar la experiencia.  
 - ⚡ **Streaming con AI SDK de Vercel**: la respuesta llega en tiempo real.  
-- 🌐 **Integración con APIs externas** (ej. Numbers API para eventos históricos).  
+- 🌐 **Integración con APIs externas** (ej. Unsplash para imagenes).  
 - 🎨 **UI con TailwindCSS** y tipografía **Geist** para un diseño limpio.  
 - 🖥️ **Despliegue en Vercel** sin configuración extra.  
 
@@ -20,8 +20,7 @@ Aplicación web hecha con **Next.js** que genera felicitaciones personalizadas d
 - [**Vercel AI SDK**](https://ai-sdk.dev/) para manejo de IA con streaming
 - [**Tailwind CSS**](https://tailwindcss.com/) para estilos
 - [**Geist Font Family**](https://vercel.com/font) fuente optimizada con next/font
-- [**Numbers API**](http://numbersapi.com/) api para recuperar hechos historicos
-- [**Sonner**](https://sonner.emilkowal.ski/) para notificaciones dentro de la web
+- [**Sonner**](https://sonner.emilkowal.ski/) para notificaciones dentro de la app
 - [**Lucide.dev**](https://lucide.dev/) para iconos
 - [**zod**](https://zod.dev/) validacion de esquemas
 - [**Google Gemini API**](https://ai.google.dev/) api de inteligencia artificial
